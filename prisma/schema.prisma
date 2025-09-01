@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Material {
+  id           Int       @id @default(autoincrement())
+  nome         String
+  imagem       String
+  descricao    String
+  propriedades String
+  aplicacoes   String
+  Produto      Produto[]
+}
+
+model Orcamento {
+  id         Int     @id @default(autoincrement())
+  usuarioId  Int
+  produtoId  Int
+  quantidade Int
+  valorTotal Float
+  status     String
+  arquivoUrl String? // Novo campo para a URL do arquivo
+  Produto    Produto @relation(fields: [produtoId], references: [id])
+  Usuario    Usuario @relation(fields: [usuarioId], references: [id])
+
+  @@index([produtoId], map: "Orcamento_produtoId_fkey")
+  @@index([usuarioId], map: "Orcamento_usuarioId_fkey")
+}
+
+model Portfolio {
+  id        Int      @id @default(autoincrement())
+  titulo    String
+  descricao String
+  imagem    String
+  data      DateTime @default(now())
+}
+
+model Produto {
+  id         Int         @id @default(autoincrement())
+  nome       String
+  descricao  String
+  preco      Float
+  imagem     String
+  usuarioId  Int
+  materialId Int
+  Orcamento  Orcamento[]
+  Material   Material    @relation(fields: [materialId], references: [id])
+  Usuario    Usuario     @relation(fields: [usuarioId], references: [id])
+
+  @@index([materialId], map: "Produto_materialId_fkey")
+  @@index([usuarioId], map: "Produto_usuarioId_fkey")
+}
+
+model Usuario {
+  id        Int         @id @default(autoincrement())
+  nome      String
+  email     String      @unique
+  senha     String
+  Orcamento Orcamento[]
+  Produto   Produto[]
+}
