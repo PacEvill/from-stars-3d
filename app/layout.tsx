@@ -1,26 +1,15 @@
 import './globals.css'
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import Providers from '@/components/Providers'
 import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
-export const metadata = {
-  title: 'From Stars 3D - Impressão 3D de Qualidade',
-  description: 'Serviços de impressão 3D de alta qualidade, modelagem, prototipagem e consultoria. Transforme suas ideias em realidade com a From Stars 3D.',
-  metadataBase: new URL('https://fromstars3d.com'),
-  alternates: {
-    canonical: '/',
-    languages: {
-      'pt-BR': '/pt-BR',
-    },
-  },
-  openGraph: {
-    images: '/og-image.png',
-  },
-}
+const inter = Inter({ subsets: ['latin'] })
 
-export const viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+export const metadata: Metadata = {
+  title: 'From Stars 3D',
+  description: 'Impressões 3D de alta qualidade',
 }
 
 export default function RootLayout({
@@ -30,9 +19,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <Header />
-        {children}
+      <body className={inter.className}>
+        <Providers>
+          <Header />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   )
