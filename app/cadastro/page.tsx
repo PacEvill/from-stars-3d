@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation' // Importar useRouter
 
 export default function CadastroPage() {
   const [name, setName] = useState('')
@@ -8,20 +9,47 @@ export default function CadastroPage() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false) // Novo estado para loading
+  const router = useRouter() // Inicializar useRouter
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    setError('') // Limpa erros anteriores
+    setLoading(true) // Ativa o estado de loading
+
     if (!name || !email || !password || !confirmPassword) {
       setError('Por favor, preencha todos os campos.')
+      setLoading(false)
       return
     }
     if (password !== confirmPassword) {
+      setLoading(false)
       setError('As senhas não coincidem.')
       return
     }
-    setError('')
-    // Simulação de cadastro
-    alert('Registro (simulado) bem-sucedido!')
+
+    try {
+      const response = await fetch('/api/usuarios', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nome: name, email, senha: password }),
+      })
+
+      if (response.ok) {
+        alert('Cadastro realizado com sucesso!')
+        router.push('/login') // Redireciona para a página de login após o cadastro
+      } else {
+        const errorData = await response.json()
+        setError(errorData.message || 'Erro ao cadastrar usuário.')
+      }
+    } catch (err) {
+      console.error('Erro na requisição:', err)
+      setError('Ocorreu um erro ao tentar cadastrar o usuário. Tente novamente.')
+    } finally {
+      setLoading(false) // Desativa o estado de loading
+    }
   }
 
   return (
@@ -37,6 +65,7 @@ export default function CadastroPage() {
               className="input-field"
               value={name}
               onChange={e => setName(e.target.value)}
+              disabled={loading} // Desabilita enquanto carrega
             />
           </div>
           <div>
@@ -47,6 +76,7 @@ export default function CadastroPage() {
               className="input-field"
               value={email}
               onChange={e => setEmail(e.target.value)}
+              disabled={loading} // Desabilita enquanto carrega
             />
           </div>
           <div>
@@ -57,6 +87,7 @@ export default function CadastroPage() {
               className="input-field"
               value={password}
               onChange={e => setPassword(e.target.value)}
+              disabled={loading} // Desabilita enquanto carrega
             />
           </div>
           <div>
@@ -67,10 +98,13 @@ export default function CadastroPage() {
               className="input-field"
               value={confirmPassword}
               onChange={e => setConfirmPassword(e.target.value)}
+              disabled={loading} // Desabilita enquanto carrega
             />
           </div>
           {error && <p className="text-red-500 text-sm -mt-2 mb-2 min-h-[1.2rem]">{error}</p>}
-          <button type="submit" className="btn-primary w-full">Criar Conta</button>
+          <button type="submit" className="btn-primary w-full" disabled={loading}>
+            {loading ? 'Cadastrando...' : 'Criar Conta'}
+          </button>
         </form>
         <div className="mt-4 text-center text-secondary">
           Já tem uma conta?{' '}
@@ -79,4 +113,4 @@ export default function CadastroPage() {
       </div>
     </main>
   )
-} 
+}

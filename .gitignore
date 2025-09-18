@@ -73,3 +73,6 @@ package-lock.json
 
 # Thumbnails
 .thumbnails/
+
+# Prisma generated files
+/app/generated/prisma

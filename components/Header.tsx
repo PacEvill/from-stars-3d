@@ -24,7 +24,7 @@ const Header = () => {
     { name: 'Catálogo', href: '/catalogo' },
     { name: 'Serviços', href: '/servicos' },
     { name: 'Portfólio', href: '/portfolio' },
-    { name: 'Guia de Materiais', href: '/guia-materiais' },
+    { name: 'Materiais', href: '/guia-materiais' },
     { name: 'Orçamento', href: '/orcamento' },
     { name: 'Sobre', href: '/sobre' },
 
