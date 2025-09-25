@@ -1,11 +1,59 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../app/generated/prisma"
 }
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             Int
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String? @db.Text
+  access_token       String? @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String? @db.Text
+  session_state      String?
+
+  user Usuario @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       Int
+  expires      DateTime
+  user         Usuario  @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Usuario {
+  id            Int       @id @default(autoincrement())
+  nome          String?
+  email         String    @unique
+  emailVerified DateTime?
+  senha         String?
+  imagem        String?
+  Orcamento     Orcamento[]
+  Produto       Produto[]
+  Carrinho      Carrinho?
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model VerificationToken {
+  identifier String   @id @default(cuid())
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
 
 model Material {
@@ -28,40 +76,41 @@ model Orcamento {
   arquivoUrl String? // Novo campo para a URL do arquivo
   Produto    Produto @relation(fields: [produtoId], references: [id])
   Usuario    Usuario @relation(fields: [usuarioId], references: [id])
-
-  @@index([produtoId], map: "Orcamento_produtoId_fkey")
-  @@index([usuarioId], map: "Orcamento_usuarioId_fkey")
 }
 
-model Portfolio {
-  id        Int      @id @default(autoincrement())
-  titulo    String
-  descricao String
-  imagem    String
-  data      DateTime @default(now())
-}
+
 
 model Produto {
-  id         Int         @id @default(autoincrement())
-  nome       String
-  descricao  String
-  preco      Float
-  imagem     String
-  usuarioId  Int
-  materialId Int
-  Orcamento  Orcamento[]
-  Material   Material    @relation(fields: [materialId], references: [id])
-  Usuario    Usuario     @relation(fields: [usuarioId], references: [id])
-
-  @@index([materialId], map: "Produto_materialId_fkey")
-  @@index([usuarioId], map: "Produto_usuarioId_fkey")
+  id              Int            @id @default(autoincrement())
+  nome            String
+  descricao       String
+  preco           Float
+  imagem          String
+  categoria       String?
+  tamanho         String?
+  disponibilidade String?
+  usuarioId       Int
+  materialId      Int
+  Orcamento       Orcamento[]
+  Material        Material       @relation(fields: [materialId], references: [id])
+  Usuario         Usuario        @relation(fields: [usuarioId], references: [id])
+  ItemCarrinho    ItemCarrinho[]
 }
 
-model Usuario {
+model Carrinho {
   id        Int         @id @default(autoincrement())
-  nome      String
-  email     String      @unique
-  senha     String
-  Orcamento Orcamento[]
-  Produto   Produto[]
+  usuarioId Int         @unique // Um carrinho por usuário
+  Usuario   Usuario     @relation(fields: [usuarioId], references: [id])
+  itens     ItemCarrinho[]
+}
+
+model ItemCarrinho {
+  id         Int      @id @default(autoincrement())
+  carrinhoId Int
+  produtoId  Int
+  quantidade Int
+  Carrinho   Carrinho @relation(fields: [carrinhoId], references: [id])
+  Produto    Produto  @relation(fields: [produtoId], references: [id])
+
+  @@unique([carrinhoId, produtoId]) // Garante que um produto só aparece uma vez no carrinho
 }

@@ -1,10 +1,10 @@
-import { PrismaClient } from '../../generated/prisma';
+import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { IncomingForm } from 'formidable';
 import path from 'path';
 import fs from 'fs/promises'; // Usar fs/promises para async/await
 
-const prisma = new PrismaClient();
+
 
 // Desabilita o body-parser padrão do Next.js para lidar com FormData manualmente
 export const config = {
