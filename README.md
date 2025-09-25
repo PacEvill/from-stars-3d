@@ -1,172 +1,155 @@
-# From Stars 3D - Site Oficial
+# From Stars 3D - Plataforma Digital
 
-Site profissional e pessoal para a marca **"From Stars 3D"**, da artista **Camila**. O site funciona como portfólio central para exibir criações de action figures personalizadas e como principal plataforma para receber orçamentos e encomendas.
+Este é o repositório oficial da plataforma digital da **From Stars 3D**, um estúdio de criação de action figures e dioramas personalizados. O projeto serve como portfólio, vitrine de produtos e principal canal para orçamentos e vendas.
 
-## 🎯 Sobre o Projeto
+## 📜 Visão Geral do Projeto
 
-Este site foi desenvolvido seguindo as melhores práticas de UX/UI, SEO e performance, incorporando:
-
-- **Design Moderno e Responsivo**: Interface elegante que transmite a qualidade do trabalho artesanal
-- **SEO Otimizado**: Otimizado para termos como "figures personalizadas Rio de Janeiro", "encomenda action figures Brasil"
-- **Integração com Redes Sociais**: Links para Instagram (@from.stars.3d) e TikTok (@from.stars.3d)
-- **Contato Direto**: Botões "Click-to-Chat" para WhatsApp (+55 21 98633-3478)
-- **Formulário de Encomendas**: Sistema completo para captação de leads
-
-## 🚀 Tecnologias Utilizadas
-
-- **Frontend**: Next.js 14 com App Router
-- **Estilização**: Tailwind CSS com design system customizado
-- **Animações**: Framer Motion para microinterações
-- **Ícones**: Lucide React
-- **Tipografia**: Google Fonts (Inter, Poppins, Roboto, Lato)
-- **Deploy**: Otimizado para Vercel/Netlify
-
-## 📁 Estrutura do Projeto
-
-```
-from-stars-3d/
-├── app/                    # App Router do Next.js
-│   ├── globals.css        # Estilos globais e Tailwind
-│   ├── layout.tsx         # Layout principal com Header/Footer
-│   └── page.tsx           # Página inicial
-├── components/             # Componentes React reutilizáveis
-│   ├── Header.tsx         # Cabeçalho com navegação
-│   ├── Hero.tsx           # Seção hero principal
-│   ├── AboutPreview.tsx   # Preview sobre a artista
-│   ├── FeaturedProducts.tsx # Produtos em destaque
-│   ├── InstagramFeed.tsx  # Feed do Instagram
-│   ├── CTASection.tsx     # Seção de contato
-│   └── Footer.tsx         # Rodapé
-├── public/                 # Arquivos estáticos
-└── package.json           # Dependências do projeto
-```
-
-## 🎨 Paleta de Cores
-
-- **Primária**: `#121212` (Cinza quase preto)
-- **Secundária**: `#F5F5F5` (Branco osso)
-- **Destaque**: `#8A2BE2` (Roxo Elétrico)
-- **Destaque Alt**: `#00FFFF` (Ciano Neon)
-
-## 📱 Páginas Implementadas
-
-1. **Home** (`/`) - Vitrine principal com hero, sobre preview e produtos
-2. **Galeria** (`/galeria`) - Portfólio completo (a implementar)
-3. **Sobre** (`/sobre`) - História da artista (a implementar)
-4. **Encomendas** (`/encomendas`) - Formulário de orçamento (a implementar)
-5. **FAQ** (`/faq`) - Perguntas frequentes (a implementar)
-6. **Contato** (`/contato`) - Informações de contato (a implementar)
-
-## 🚀 Como Executar
-
-### Pré-requisitos
-
-- Node.js 18+ 
-- npm ou yarn
-
-### Instalação
-
-1. **Clone o repositório**
-   ```bash
-   git clone [url-do-repositorio]
-   cd from-stars-3d
-   ```
-
-2. **Instale as dependências**
-   ```bash
-   npm install
-   # ou
-   yarn install
-   ```
-
-3. **Execute em desenvolvimento**
-   ```bash
-   npm run dev
-   # ou
-   yarn dev
-   ```
-
-4. **Acesse o site**
-   ```
-   http://localhost:3000
-   ```
-
-### Build para Produção
-
-```bash
-npm run build
-npm start
-```
-
-## 🔧 Configurações
-
-### Variáveis de Ambiente
-
-Crie um arquivo `.env.local` na raiz do projeto:
-
-```env
-NEXT_PUBLIC_SITE_URL=https://fromstars3d.com
-NEXT_PUBLIC_INSTAGRAM_USERNAME=from.stars.3d
-NEXT_PUBLIC_TIKTOK_USERNAME=from.stars.3d
-NEXT_PUBLIC_WHATSAPP_NUMBER=+5521986333478
-```
-
-### Personalizações
-
-- **Cores**: Edite `tailwind.config.js` para alterar a paleta
-- **Fontes**: Modifique `app/layout.tsx` para trocar as fontes
-- **Conteúdo**: Atualize os componentes para personalizar textos e imagens
-
-## 📸 Imagens e Conteúdo
-
-O site está configurado para usar as imagens das pastas:
-- `/frieren/` - Peças da Frieren
-- `/mercy/` - Peças da Mercy
-- `/roxy-migurdia/` - Peças da Roxy
-- `/going-merry/` - Peças do Going Merry
-- `/this-is-fine/` - Peças do meme "This is Fine"
-
-## 🌐 Deploy
-
-### Vercel (Recomendado)
-
-1. Conecte seu repositório ao Vercel
-2. Configure as variáveis de ambiente
-3. Deploy automático a cada push
-
-### Netlify
-
-1. Conecte seu repositório ao Netlify
-2. Configure o build command: `npm run build`
-3. Configure o publish directory: `.next`
-
-## 📊 SEO e Performance
-
-- **Meta tags** otimizadas para redes sociais
-- **Schema markup** para rich snippets
-- **Lazy loading** de imagens
-- **Compressão** e otimizações automáticas
-- **PWA ready** para instalação mobile
-
-## 🔮 Próximos Passos
-
-- [ ] Implementar páginas restantes (Galeria, Sobre, Encomendas, FAQ, Contato)
-- [ ] Integrar API do Instagram para feed dinâmico
-- [ ] Sistema de blog para SEO de cauda longa
-- [ ] Área de cliente para acompanhamento de encomendas
-- [ ] Loja virtual para peças prontas
-
-## 📞 Suporte
-
-Para dúvidas técnicas ou suporte:
-- **Desenvolvedor**: [Seu contato]
-- **Artista**: Camila - From Stars 3D
-- **WhatsApp**: +55 21 98633-3478
-
-## 📄 Licença
-
-Este projeto é propriedade da From Stars 3D. Todos os direitos reservados.
+O objetivo é criar uma experiência digital imersiva que reflita a qualidade artística e artesanal dos produtos. A plataforma foi desenhada para ser robusta, escalável e otimizada para mecanismos de busca (SEO), garantindo uma base sólida para o crescimento do negócio.
 
 ---
 
-**Desenvolvido com ❤️ para Camila e a From Stars 3D** 
+## ✨ Tecnologias Principais
+
+- **Framework:** [Next.js](https://nextjs.org/) 14+ (com App Router)
+- **Linguagem:** [TypeScript](https://www.typescriptlang.org/)
+- **Banco de Dados:** [PostgreSQL](https://www.postgresql.org/) (ou outro compatível com Prisma)
+- **ORM:** [Prisma](https://www.prisma.io/) para interação com o banco de dados
+- **Estilização:** [Tailwind CSS](https://tailwindcss.com/)
+- **Componentes:** UI Própria, inspirada em designs modernos
+- **Ícones:** [Lucide React](https://lucide.dev/guide/packages/lucide-react)
+- **Deploy:** Otimizado para [Vercel](https://vercel.com/)
+
+---
+
+## 🚀 Começando
+
+Siga os passos abaixo para configurar e executar o ambiente de desenvolvimento local.
+
+### 1. Pré-requisitos
+
+- **Node.js:** Versão `18.17.0` ou superior.
+- **npm** ou **yarn**.
+- **Docker** (Recomendado) para uma instância PostgreSQL, ou uma URL de banco de dados já existente.
+
+### 2. Clonar o Repositório
+
+```bash
+git clone https://github.com/seu-usuario/from-star-3d-main.git
+cd from-star-3d-main
+```
+
+### 3. Instalar Dependências
+
+```bash
+npm install
+```
+
+### 4. Configurar Variáveis de Ambiente
+
+Crie uma cópia do arquivo de exemplo `.env.example` e renomeie para `.env.local`.
+
+```bash
+cp .env.example .env.local
+```
+
+Agora, edite o arquivo `.env.local` e preencha a variável `DATABASE_URL` com a string de conexão do seu banco de dados.
+
+**.env.local**
+```env
+# Exemplo para PostgreSQL local com Docker
+DATABASE_URL="postgresql://user:password@localhost:5432/fromstars3d?schema=public"
+
+# Outras variáveis públicas
+NEXT_PUBLIC_SITE_URL="http://localhost:3000"
+```
+
+### 5. Configurar o Banco de Dados
+
+Execute as migrações do Prisma para criar as tabelas no seu banco de dados.
+
+```bash
+npx prisma migrate dev
+```
+
+### 6. Executar o Projeto
+
+Inicie o servidor de desenvolvimento.
+
+```bash
+npm run dev
+```
+
+O site estará disponível em [http://localhost:3000](http://localhost:3000).
+
+---
+
+## 🛠️ Scripts Disponíveis
+
+- `npm run dev`: Inicia o servidor em modo de desenvolvimento.
+- `npm run build`: Compila o projeto para produção.
+- `npm run start`: Inicia o servidor em modo de produção (requer `build` prévio).
+- `npm run lint`: Executa o linter para análise de código.
+- `npx prisma studio`: Abre a interface visual do Prisma para gerenciar os dados.
+- `npx prisma migrate dev`: Executa novas migrações e atualiza o schema do banco.
+- `npx prisma generate`: Gera/atualiza o cliente Prisma após mudanças no `schema.prisma`.
+
+---
+
+## 🗂️ Estrutura do Projeto
+
+```
+from-star-3d-main/
+├── app/                # Rotas e páginas (App Router)
+│   ├── api/            # Endpoints da API (Backend)
+│   ├── admin/          # Rotas do painel de administração
+│   ├── (user)/         # Rotas de usuário (ex: catalogo, produto)
+│   ├── layout.tsx      # Layout principal
+│   └── page.tsx        # Página inicial (Home)
+├── components/         # Componentes React reutilizáveis e agnósticos
+├── prisma/             # Configuração do banco de dados
+│   ├── migrations/     # Histórico de migrações do banco
+│   └── schema.prisma   # Definição dos modelos de dados
+├── public/             # Arquivos estáticos (imagens, fontes)
+├── .env.example        # Arquivo de exemplo para variáveis de ambiente
+├── package.json        # Dependências e scripts
+└── tsconfig.json       # Configurações do TypeScript
+```
+
+---
+
+## 🗺️ Roadmap de Desenvolvimento
+
+Esta é a lista de prioridades atuais para a evolução da plataforma.
+
+- **[P1] Funcionalidades do Usuário:**
+  - [ ] Implementar Sistema de Busca global.
+  - [ ] Adicionar Filtros e Ordenação na página de Catálogo.
+  - [ ] Desenvolver a Página de Perfil do Usuário (Histórico de Pedidos).
+  - [ ] Criar sistema de Avaliações e Comentários nos produtos.
+
+- **[P2] Painel de Administração:**
+  - [x] Listar dados existentes (ex: materiais, produtos).
+  - [ ] Implementar CRUD completo para Produtos.
+  - [ ] Implementar CRUD completo para Materiais e Categorias.
+  - [ ] Adicionar funcionalidade para atualizar Status de Pedidos.
+
+- **[P3] Melhorias Técnicas:**
+  - [x] SEO dinâmico nas páginas de produto.
+  - [ ] Implementar sistema de autenticação robusto com NextAuth.js.
+  - [ ] Otimizar imagens com o componente `<Image>` do Next.js.
+
+---
+
+## 🎨 Equipe de Criação
+
+- Camila
+- Diego Silva
+- Victor Costa
+
+*Projeto idealizado e desenvolvido em conjunto pela equipe, com o suporte do assistente de IA Gemini.*
+
+---
+
+## 📄 Licença
+
+Este projeto é de propriedade da From Stars 3D. Todos os direitos reservados.

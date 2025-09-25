@@ -72,6 +72,15 @@ const AboutPreview = () => {
                 A artista por trás da <span className="text-accent font-medium">From Stars 3D</span>. 
                 Minha jornada começou com uma paixão por dar vida aos personagens que amo através da arte 3D.
               </motion.p>
+              <motion.p
+                className="text-lg text-gray-400"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+                viewport={{ once: true }}
+              >
+                Junto com Diego Silva e Victor Costa, formamos a equipe que dá vida a este projeto, unindo arte e tecnologia para criar algo único.
+              </motion.p>
             </div>
 
             <motion.div 
@@ -114,7 +123,7 @@ const AboutPreview = () => {
                 href="/sobre" 
                 className="inline-flex items-center text-accent hover:text-accentAlt transition-colors duration-300 font-medium group"
               >
-                Conheça minha história completa
+                Conheça nossa história completa
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
               </Link>
             </motion.div>

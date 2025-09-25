@@ -23,6 +23,24 @@ const AboutPage = () => {
           <p>Se você tem uma ideia específica em mente, entre em contato conosco! Adoramos desafios e estamos prontos para criar algo verdadeiramente exclusivo para você, desde o conceito inicial até a entrega final.</p>
         </section>
 
+        <section className="mb-8">
+          <h2 className="text-2xl font-semibold mb-4 text-accentAlt border-b border-gray-700 pb-2">Nossa Equipe</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div className="bg-gray-900/50 p-6 rounded-lg">
+              <h3 className="text-xl font-bold text-white">Camila</h3>
+              <p className="text-purple-400">Artista & Fundadora</p>
+            </div>
+            <div className="bg-gray-900/50 p-6 rounded-lg">
+              <h3 className="text-xl font-bold text-white">Diego Silva</h3>
+              <p className="text-purple-400">Desenvolvimento</p>
+            </div>
+            <div className="bg-gray-900/50 p-6 rounded-lg">
+              <h3 className="text-xl font-bold text-white">Victor Costa</h3>
+              <p className="text-purple-400">Desenvolvimento</p>
+            </div>
+          </div>
+        </section>
+
         <section>
           <h2 className="text-2xl font-semibold mb-4 text-accentAlt border-b border-gray-700 pb-2">Nosso Compromisso</h2>
           <p className="mb-4">Nosso compromisso é com a satisfação do cliente, a inovação contínua e a sustentabilidade. Buscamos sempre as melhores práticas para minimizar nosso impacto ambiental e garantir que nossos produtos sejam feitos com responsabilidade.</p>

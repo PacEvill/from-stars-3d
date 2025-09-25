@@ -120,7 +120,7 @@ const Footer = () => {
           <div className="flex items-center space-x-2 text-gray-400 text-sm mb-4 md:mb-0">
             <span>© 2024 From Stars 3D. Criado com</span>
             <Heart className="w-4 h-4 text-red-400" />
-            <span>por Camila.</span>
+            <span>por Camila, Diego Silva & Victor.</span>
           </div>
           
           <div className="flex items-center space-x-4">

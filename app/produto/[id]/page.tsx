@@ -1,75 +1,121 @@
-import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
+import prisma from '@/lib/prisma';
+import type { Metadata } from 'next';
 
-const modelos = [
-  { id: 1, nome: 'Frieren', descricao: 'Modelo 3D em resina, pintado à mão, inspirado na personagem Frieren.', categoria: 'Anime', material: 'Resina', tamanho: 'Pequeno', disponibilidade: 'Em estoque', imagens: ['/frieren/Frieren_01.png', '/frieren/Frieren_02.png', '/frieren/Frieren_03.png', '/frieren/Frieren_04.png'] },
-  { id: 2, nome: 'Going Merry', descricao: 'Modelo 3D do navio Going Merry, com acabamento detalhado.', categoria: 'Navios', material: 'PLA', tamanho: 'Médio', disponibilidade: 'Sob encomenda', imagens: ['/going-merry/going_merry_01.png', '/going-merry/going_merry_02.png', '/going-merry/going_merry_03.png', '/going-merry/going_merry_04.png'] },
-  { id: 3, nome: 'Mercy', descricao: 'Modelo 3D da personagem Mercy, pintura manual e base personalizada.', categoria: 'Jogos', material: 'Resina', tamanho: 'Grande', disponibilidade: 'Em estoque', imagens: ['/mercy/mercy_01.png', '/mercy/mercy_02.png', '/mercy/mercy_03.png', '/mercy/mercy_04.png', '/mercy/mercy_05.png', '/mercy/mercy_06.png'] },
-  { id: 4, nome: 'Roxy Migurdia', descricao: 'Modelo 3D da Roxy Migurdia, acabamento premium e pintura artística.', categoria: 'Anime', material: 'ABS', tamanho: 'Pequeno', disponibilidade: 'Em estoque', imagens: ['/roxy-migurdia/roxy_migurdia_01.png', '/roxy-migurdia/roxy_migurdia_02.png', '/roxy-migurdia/roxy_migurdia_03.png', '/roxy-migurdia/roxy_migurdia_04.png', '/roxy-migurdia/roxy_migurdia_05.png'] },
-  { id: 5, nome: 'This is Fine', descricao: 'Modelo 3D divertido inspirado no meme "This is Fine".', categoria: 'Memes', material: 'PLA', tamanho: 'Médio', disponibilidade: 'Esgotado', imagens: ['/this-is-fine/this_is_fine_01.png', '/this-is-fine/this_is_fine_02.png', '/this-is-fine/this_is_fine_03.png', '/this-is-fine/this_is_fine_04.png'] },
-];
+// Define o tipo das props que a página recebe, incluindo os parâmetros da URL
+type ProductPageProps = {
+  params: {
+    id: string;
+  };
+};
 
-export default function ProductDetailPage() {
-  const router = useRouter();
-  const { id } = router.query;
+/**
+ * Função para gerar metadados de SEO dinamicamente.
+ * Ela é executada no servidor antes da renderização da página.
+ */
+export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+  const id = parseInt(params.id, 10);
 
-  const product = modelos.find(modelo => modelo.id === Number(id));
+  if (isNaN(id)) {
+    return {
+      title: 'Produto não encontrado',
+      description: 'O produto que você está procurando não existe ou foi movido.',
+    };
+  }
+
+  const product = await prisma.produto.findUnique({
+    where: { id },
+  });
 
   if (!product) {
-    return <p className="text-secondary text-center">Produto não encontrado.</p>;
+    return {
+      title: 'Produto não encontrado',
+      description: 'O produto que você está procurando não existe ou foi movido.',
+    };
   }
+
+  return {
+    title: `${product.nome} | From Stars 3D`,
+    description: product.descricao,
+    openGraph: {
+      title: `${product.nome} | From Stars 3D`,
+      description: product.descricao,
+      images: [
+        {
+          url: product.imagem, // A imagem principal do produto
+          width: 1200,
+          height: 630,
+          alt: product.nome,
+        },
+      ],
+      locale: 'pt_BR',
+      type: 'website',
+    },
+  };
+}
+
+/**
+ * Componente da página de detalhes do produto.
+ * Agora é um Server Component assíncrono que busca dados diretamente do banco.
+ */
+export default async function ProductDetailPage({ params }: ProductPageProps) {
+  const id = parseInt(params.id, 10);
+
+  // Se o ID não for um número, retorna página 404
+  if (isNaN(id)) {
+    notFound();
+  }
+
+  const product = await prisma.produto.findUnique({
+    where: { id },
+    include: {
+      Material: true, // Inclui os dados do material relacionado
+    },
+  });
+
+  // Se nenhum produto for encontrado com o ID, retorna página 404
+  if (!product) {
+    notFound();
+  }
+
+  // Nota: O modelo de dados atual só tem uma imagem. A galeria foi removida.
+  // Para ter uma galeria, o schema do Prisma precisaria ser atualizado.
 
   return (
     <main className="min-h-screen bg-primary py-16 px-4">
       <div className="max-w-4xl mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl md:text-4xl font-heading font-bold text-accent mb-6 text-center">{product.nome}</h1>
-        
+        <h1 className="text-3xl md:text-4xl font-heading font-bold text-accent mb-6 text-center">
+          {product.nome}
+        </h1>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div className="relative w-full h-80 rounded-lg overflow-hidden">
             <Image
-              src={product.imagens[0]} // Exibe a primeira imagem como principal
+              src={product.imagem} // Imagem vinda do banco de dados
               alt={product.nome}
-              layout="fill"
-              objectFit="cover"
+              fill
+              style={{ objectFit: 'cover' }}
               className="rounded-lg"
             />
           </div>
           <div>
             <p className="text-secondary text-lg mb-4">{product.descricao}</p>
-            <p className="text-secondary text-md mb-2"><span className="font-semibold">Categoria:</span> {product.categoria}</p>
-            <p className="text-secondary text-md mb-2"><span className="font-semibold">Material:</span> {product.material}</p>
-            <p className="text-secondary text-md mb-2"><span className="font-semibold">Tamanho:</span> {product.tamanho}</p>
-            <p className="text-secondary text-md mb-4"><span className="font-semibold">Disponibilidade:</span> {product.disponibilidade}</p>
-            
-            {/* Botão para voltar ao catálogo */}
-            <button
-              onClick={() => router.push('/catalogo')}
-              className="bg-accent hover:bg-accent-dark text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300"
+            <p className="text-secondary text-md mb-2">
+              <span className="font-semibold">Material:</span> {product.Material.nome}
+            </p>
+            <p className="text-accent-light text-xl mb-4">
+              <span className="font-semibold">Preço:</span> R$ {product.preco.toFixed(2).replace('.', ',')}
+            </p>
+
+            <a
+              href="/catalogo"
+              className="mt-4 inline-block bg-accent hover:bg-accent-dark text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300"
             >
               Voltar ao Catálogo
-            </button>
+            </a>
           </div>
         </div>
-
-        {/* Galeria de imagens adicionais */}
-        {product.imagens.length > 1 && (
-          <div className="mt-8">
-            <h2 className="text-2xl font-heading font-bold text-secondary mb-4">Mais Imagens</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {product.imagens.map((image, index) => (
-                <div key={index} className="relative w-full h-40 rounded-lg overflow-hidden">
-                  <Image
-                    src={image}
-                    alt={`${product.nome} - Imagem ${index + 1}`}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-lg"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </main>
   );
