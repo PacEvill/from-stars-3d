@@ -23,8 +23,8 @@ export default function CadastroPage() {
       return
     }
     if (password !== confirmPassword) {
-      setError('As senhas não coincidem.')
       setLoading(false)
+      setError('As senhas não coincidem.')
       return
     }
 
@@ -38,7 +38,6 @@ export default function CadastroPage() {
       })
 
       if (response.ok) {
-        // const data = await response.json(); // Se precisar dos dados de retorno
         alert('Cadastro realizado com sucesso!')
         router.push('/login') // Redireciona para a página de login após o cadastro
       } else {
