@@ -14,12 +14,10 @@ export async function POST(request: Request) {
     const message = formData.get('message');
     const file = formData.get('file') as File | null;
 
-    console.log('Received new order request:');
-    console.log('Name:', name);
-    console.log('Email:', email);
-    console.log('Message:', message);
     if (file) {
-      console.log('File:', file.name, file.type, file.size);
+      // In a real application, you would save the file to a storage service
+      // and store its reference in a database along with other order details.
+    }
       // In a real application, you would save the file to a storage service
       // and store its reference in a database along with other order details.
     }

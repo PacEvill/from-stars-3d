@@ -3,7 +3,9 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Instagram, Video } from 'lucide-react'
+import { useSession, signOut } from 'next-auth/react'
+import { useCart } from '@/components/CartProvider'
+import { Menu, X, Instagram, Video, User, LogOut, ShoppingCart } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 // Types
@@ -14,9 +16,13 @@ type NavItem = {
 
 const Header = () => {
   // State
+  const { data: session, status } = useSession()
+  const { cart, openCart } = useCart()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const pathname = usePathname()
+
+  const itemCount = cart?.itens?.reduce((acc, item) => acc + item.quantidade, 0) || 0
 
   // Constants
   const NAV_ITEMS: NavItem[] = [
@@ -54,6 +60,73 @@ const Header = () => {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const AuthLinks = () => {
+    if (status === "loading") {
+      return <div className="w-24 h-8 bg-gray-700 rounded animate-pulse"></div>
+    }
+
+    if (status === "authenticated") {
+      return (
+        <div className="flex items-center space-x-4">
+          <Link href="/perfil" className="flex items-center text-secondary hover:text-accent transition-colors duration-300">
+            <User size={20} className="mr-1" />
+            Perfil
+          </Link>
+          <button onClick={() => signOut()} className="flex items-center text-secondary hover:text-accent transition-colors duration-300">
+            <LogOut size={20} className="mr-1" />
+            Sair
+          </button>
+        </div>
+      )
+    }
+
+    return (
+      <div className="flex items-center space-x-4">
+        <Link href="/login" className="btn-secondary py-1 px-3 text-sm">Entrar</Link>
+        <Link href="/cadastro" className="btn-primary py-1 px-3 text-sm">Cadastrar</Link>
+      </div>
+    )
+  }
+
+  const CartIcon = () => (
+    <button onClick={openCart} className="relative text-secondary hover:text-accent transition-colors duration-300">
+      <ShoppingCart size={24} />
+      {itemCount > 0 && (
+        <span className="absolute -top-2 -right-2 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-accent rounded-full">
+          {itemCount}
+        </span>
+      )}
+    </button>
+  )
+
+  const MobileAuthLinks = () => {
+    if (status === "loading") {
+      return <div className="w-full h-10 bg-gray-700 rounded animate-pulse"></div>
+    }
+
+    if (status === "authenticated") {
+      return (
+        <div className="space-y-4">
+            <Link href="/perfil" onClick={() => setIsMenuOpen(false)} className="flex items-center text-secondary hover:text-accent transition-colors duration-300 font-medium py-2">
+                <User size={20} className="mr-2" />
+                Perfil
+            </Link>
+            <button onClick={() => { signOut(); setIsMenuOpen(false); }} className="flex items-center w-full text-left text-secondary hover:text-accent transition-colors duration-300 font-medium py-2">
+                <LogOut size={20} className="mr-2" />
+                Sair
+            </button>
+        </div>
+      )
+    }
+
+    return (
+        <div className="flex items-center space-x-2">
+            <Link href="/login" className="btn-secondary py-1 px-3 text-sm w-full text-center">Entrar</Link>
+            <Link href="/cadastro" className="btn-primary py-1 px-3 text-sm w-full text-center">Cadastrar</Link>
+        </div>
+    )
+  }
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -96,10 +169,12 @@ const Header = () => {
             </nav>
           </div>
 
-          {/* Login/Cadastro e Social Links */}
+          {/* Login/Cadastro, Carrinho e Social Links */}
           <div className="hidden md:flex items-center space-x-4">
-            <Link href="/login" className="btn-secondary py-1 px-3 text-sm">Entrar</Link>
-            <Link href="/cadastro" className="btn-primary py-1 px-3 text-sm">Cadastrar</Link>
+            <AuthLinks />
+            <div className="border-l border-gray-600 h-6 mx-2"></div>
+            <CartIcon />
+            <div className="border-l border-gray-600 h-6 mx-2"></div>
             {SOCIAL_LINKS.map((social) => (
               <Link
                 key={social.label}
@@ -135,10 +210,14 @@ const Header = () => {
             className="md:hidden bg-gray-800 border-t border-gray-700"
           >
             <div className="px-4 py-6 space-y-4">
-              <div className="flex items-center space-x-2 mb-4">
-                <Link href="/login" className="btn-secondary py-1 px-3 text-sm w-full text-center">Entrar</Link>
-                <Link href="/cadastro" className="btn-primary py-1 px-3 text-sm w-full text-center">Cadastrar</Link>
+              <div className="mb-4">
+                <MobileAuthLinks />
               </div>
+              <button onClick={() => { openCart(); setIsMenuOpen(false); }} className="flex items-center text-secondary hover:text-accent transition-colors duration-300 font-medium py-2">
+                  <ShoppingCart size={20} className="mr-2" />
+                  Carrinho ({itemCount})
+              </button>
+              <div className="border-t border-gray-700"></div>
               {NAV_ITEMS.map((item) => (
                 <Link
                   key={item.name}

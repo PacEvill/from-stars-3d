@@ -1,9 +1,22 @@
 'use client'
 
+import { useState, FormEvent } from 'react'
 import { motion } from 'framer-motion'
 import { MessageCircle, Phone, Mail, Send, Star } from 'lucide-react'
 
 const CTASection = () => {
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' })
+  const [status, setStatus] = useState({ loading: false, success: false, error: '' })
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setStatus({ loading: true, success: false, error: '' })
+    // Simulação de envio
+    await new Promise(resolve => setTimeout(resolve, 1500))
+    setStatus({ loading: false, success: true, error: '' })
+    setFormData({ name: '', email: '', subject: '', message: '' })
+  }
+
   return (
     <section className="py-20 bg-gradient-to-br from-primary via-gray-800 to-primary">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,7 +55,7 @@ const CTASection = () => {
               Envie sua Mensagem
             </h3>
             
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="name" className="block text-secondary font-medium mb-2">
@@ -53,6 +66,8 @@ const CTASection = () => {
                     id="name"
                     name="name"
                     required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="input-field"
                     placeholder="Seu nome completo"
                   />
@@ -66,6 +81,8 @@ const CTASection = () => {
                     id="email"
                     name="email"
                     required
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="input-field"
                     placeholder="seu@email.com"
                   />
@@ -80,6 +97,8 @@ const CTASection = () => {
                   id="subject"
                   name="subject"
                   className="input-field"
+                  value={formData.subject}
+                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                 >
                   <option value="">Selecione um assunto</option>
                   <option value="encomenda">Encomenda de Peça</option>
@@ -98,6 +117,8 @@ const CTASection = () => {
                   name="message"
                   rows={5}
                   required
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   className="input-field resize-none"
                   placeholder="Conte-me sobre sua ideia, personagem favorito ou qualquer detalhe que queira compartilhar..."
                 ></textarea>
@@ -105,11 +126,20 @@ const CTASection = () => {
 
               <button
                 type="submit"
-                className="btn-primary w-full group"
+                disabled={status.loading}
+                className="btn-primary w-full group disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Send className="mr-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                Enviar Mensagem
+                {status.loading ? (
+                  'Enviando...'
+                ) : (
+                  <>
+                    <Send className="mr-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                    Enviar Mensagem
+                  </>
+                )}
               </button>
+              {status.success && <p className="text-green-400 text-center mt-4">Mensagem enviada com sucesso!</p>}
+              {status.error && <p className="text-red-400 text-center mt-4">{status.error}</p>}
             </form>
           </motion.div>
 
@@ -134,7 +164,7 @@ const CTASection = () => {
                   Prefere um contato mais direto? Me chame no WhatsApp para conversarmos sobre sua ideia!
                 </p>
                 <a
-                  href="https://wa.me/5521986333478?text=Olá! Vi seu site e gostaria de conversar sobre uma encomenda."
+                  href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=Olá! Vi seu site e gostaria de conversar sobre uma encomenda.`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
@@ -143,7 +173,7 @@ const CTASection = () => {
                   <span>Chamar no WhatsApp</span>
                 </a>
                 <p className="text-sm text-gray-400">
-                  +55 21 98633-3478
+                  {process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}
                 </p>
               </div>
             </div>
@@ -171,7 +201,7 @@ const CTASection = () => {
                   </div>
                   <div>
                     <p className="text-secondary font-medium">E-mail</p>
-                    <p className="text-gray-400 text-sm">contato@fromstars3d.com</p>
+                    <p className="text-gray-400 text-sm">{process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contato@fromstars3d.com'}</p>
                   </div>
                 </div>
 
@@ -181,7 +211,7 @@ const CTASection = () => {
                   </div>
                   <div>
                     <p className="text-secondary font-medium">WhatsApp</p>
-                    <p className="text-gray-400 text-sm">+55 21 98633-3478</p>
+                    <p className="text-gray-400 text-sm">{process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}</p>
                   </div>
                 </div>
               </div>

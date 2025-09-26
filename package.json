@@ -9,12 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@prisma/client": "^6.16.2",
+=======
+    "@next-auth/prisma-adapter": "^1.0.7",
+    "@prisma/client": "^6.15.0",
+    "@types/bcryptjs": "^2.4.6",
+>>>>>>> e49773a9c7187248936ff0f570a2e0ad5af17ab1
     "autoprefixer": "^10.4.16",
+    "bcryptjs": "^3.0.2",
     "formidable": "^3.5.4",
     "framer-motion": "^10.16.4",
     "lucide-react": "^0.292.0",
+<<<<<<< HEAD
     "next": "^14.2.33",
+=======
+    "next": "^14.2.32",
+>>>>>>> e49773a9c7187248936ff0f570a2e0ad5af17ab1
     "next-auth": "^4.24.11",
     "postcss": "^8.4.31",
     "react": "^18",

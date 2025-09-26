@@ -1,7 +1,6 @@
-import { PrismaClient } from '../../generated/prisma';
+import prisma from "@/lib/prisma";
 import { NextResponse } from 'next/server';
-
-const prisma = new PrismaClient();
+import bcrypt from 'bcryptjs';
 
 export async function GET() {
   try {
@@ -10,8 +9,6 @@ export async function GET() {
   } catch (error) {
     console.error('Erro ao buscar usuários:', error);
     return NextResponse.json({ message: 'Erro interno do servidor ao buscar usuários.' }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
 }
 
@@ -32,11 +29,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Email já cadastrado.' }, { status: 409 });
     }
 
+    const hashedPassword = await bcrypt.hash(senha, 10);
+
     const novoUsuario = await prisma.usuario.create({
       data: {
         nome,
         email,
-        senha, // Em um ambiente real, a senha deve ser hashada antes de salvar!
+        senha: hashedPassword,
       },
     });
 
@@ -44,7 +43,5 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Erro ao criar usuário:', error);
     return NextResponse.json({ message: 'Erro interno do servidor ao criar usuário.' }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
 }
