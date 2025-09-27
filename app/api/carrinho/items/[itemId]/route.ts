@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
-import { PrismaClient } from '@/app/generated/prisma'
-
-const prisma = new PrismaClient()
+import prisma from '@/lib/prisma'
 
 // PUT: Atualiza a quantidade de um item
 export async function PUT(request: Request, { params }: { params: { itemId: string } }) {
