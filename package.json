@@ -1,6 +1,7 @@
 {
   "name": "from-stars-3d",
   "version": "0.1.0",
+  "description": "Forcing a file update to bypass Vercel cache.",
   "private": true,
   "scripts": {
     "dev": "next dev",
