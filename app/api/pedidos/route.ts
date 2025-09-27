@@ -18,9 +18,6 @@ export async function POST(request: Request) {
       // In a real application, you would save the file to a storage service
       // and store its reference in a database along with other order details.
     }
-      // In a real application, you would save the file to a storage service
-      // and store its reference in a database along with other order details.
-    }
 
     const newOrder = {
       id: (orders.length + 1).toString().padStart(3, '0'),
