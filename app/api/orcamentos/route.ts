@@ -6,13 +6,6 @@ import fs from 'fs/promises'; // Usar fs/promises para async/await
 
 
 
-// Desabilita o body-parser padrão do Next.js para lidar com FormData manualmente
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 export async function GET() {
   try {
     const orcamentos = await prisma.orcamento.findMany({
