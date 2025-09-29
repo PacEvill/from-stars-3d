@@ -13,33 +13,33 @@ export const authOptions: NextAuthOptions = {
     verificationToken: 'VerificationToken',
   }),
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-      async profile(profile) {
-        const user = await prisma.usuario.findUnique({
-          where: { email: profile.email },
-        });
-        if (!user) {
-          // Se o usuário não existe, crie um novo
-          const newUser = await prisma.usuario.create({
-            data: {
-              email: profile.email,
-              nome: profile.name,
-              imagem: profile.picture,
-            },
-          });
-          return {
-            id: newUser.id.toString(),
-            ...newUser,
-          };
-        }
-        return {
-          id: user.id.toString(),
-          ...user,
-        };
-      },
-    }),
+    // GoogleProvider({
+    //   clientId: process.env.GOOGLE_CLIENT_ID as string,
+    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    //   async profile(profile) {
+    //     const user = await prisma.usuario.findUnique({
+    //       where: { email: profile.email },
+    //     });
+    //     if (!user) {
+    //       // Se o usuário não existe, crie um novo
+    //       const newUser = await prisma.usuario.create({
+    //         data: {
+    //           email: profile.email,
+    //           nome: profile.name,
+    //           imagem: profile.picture,
+    //         },
+    //       });
+    //       return {
+    //         id: newUser.id.toString(),
+    //         ...newUser,
+    //       };
+    //     }
+    //     return {
+    //       id: user.id.toString(),
+    //       ...user,
+    //     };
+    //   },
+    // }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
