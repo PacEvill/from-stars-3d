@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function ProfilePage() {
   const { data: session, status, update } = useSession()
@@ -105,70 +106,84 @@ export default function ProfilePage() {
   if (status === 'authenticated') {
     return (
       <div className="container mx-auto px-4 py-12 pt-24 min-h-screen">
-        <h1 className="text-4xl font-bold mb-8 text-white">Seu Perfil</h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          
-          {/* Coluna da Imagem e Info */}
-          <div className="md:col-span-1 bg-gray-800 p-8 rounded-lg shadow-lg flex flex-col items-center">
-            <div className="relative w-40 h-40 mb-4">
-              <Image
-                src={session.user.image || '/default-avatar.svg'} // Use uma imagem padrão
-                alt="Foto de Perfil"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-full"
-              />
-            </div>
-            <h2 className="text-2xl font-bold text-white">{session.user.name}</h2>
-            <p className="text-md text-gray-400">{session.user.email}</p>
-            
-            <label htmlFor="imageUpload" className="mt-6 cursor-pointer bg-accent hover:bg-accent-dark text-white font-bold py-2 px-4 rounded transition duration-300">
-              Trocar Imagem
-            </label>
-            <input id="imageUpload" type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Coluna do Menu Lateral */}
+          <aside className="md:col-span-1 bg-gray-800 p-6 rounded-lg shadow-lg">
+            <nav className="space-y-2">
+              <Link href="/perfil">
+                <a className="block text-white font-semibold bg-gray-700 p-3 rounded-md">Meu Perfil</a>
+              </Link>
+              <Link href="/perfil/pedidos">
+                <a className="block text-gray-300 hover:bg-gray-700 hover:text-white p-3 rounded-md">Meus Pedidos</a>
+              </Link>
+              <Link href="/perfil/enderecos">
+                <a className="block text-gray-300 hover:bg-gray-700 hover:text-white p-3 rounded-md">Meus Endereços</a>
+              </Link>
+            </nav>
+          </aside>
 
-          {/* Coluna da Troca de Senha */}
-          <div className="md:col-span-2 bg-gray-800 p-8 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 text-white">Alterar Senha</h2>
-            <form onSubmit={handlePasswordChange}>
-              <div className="mb-4">
-                <label className="block text-gray-300 mb-2" htmlFor="currentPassword">Senha Atual</label>
-                <input
-                  type="password"
-                  id="currentPassword"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-accent"
+          {/* Coluna Principal de Conteúdo */}
+          <main className="md:col-span-3 space-y-8">
+            <div className="bg-gray-800 p-8 rounded-lg shadow-lg flex items-center space-x-6">
+              <div className="relative w-24 h-24 flex-shrink-0">
+                <Image
+                  src={session.user.image || '/default-avatar.svg'}
+                  alt="Foto de Perfil"
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-full"
                 />
               </div>
-              <div className="mb-4">
-                <label className="block text-gray-300 mb-2" htmlFor="newPassword">Nova Senha</label>
-                <input
-                  type="password"
-                  id="newPassword"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-accent"
-                />
+              <div>
+                <h2 className="text-3xl font-bold text-white">{session.user.name}</h2>
+                <p className="text-lg text-gray-400">{session.user.email}</p>
+                <label htmlFor="imageUpload" className="mt-4 inline-block cursor-pointer bg-accent hover:bg-accent-dark text-white font-bold py-2 px-4 rounded transition duration-300 text-sm">
+                  Trocar Imagem
+                </label>
+                <input id="imageUpload" type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
               </div>
-              <div className="mb-6">
-                <label className="block text-gray-300 mb-2" htmlFor="confirmPassword">Confirmar Nova Senha</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-accent"
-                />
-              </div>
-              <button type="submit" className="w-full bg-accent hover:bg-accent-dark text-white font-bold py-2 px-4 rounded transition duration-300">
-                Salvar Nova Senha
-              </button>
-            </form>
-            {message && <p className="mt-4 text-center text-accent">{message}</p>}
-          </div>
+            </div>
+
+            <div className="bg-gray-800 p-8 rounded-lg shadow-lg">
+              <h2 className="text-2xl font-bold mb-6 text-white">Alterar Senha</h2>
+              <form onSubmit={handlePasswordChange} className="space-y-4">
+                <div>
+                  <label className="block text-gray-300 mb-2" htmlFor="currentPassword">Senha Atual</label>
+                  <input
+                    type="password"
+                    id="currentPassword"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-accent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-300 mb-2" htmlFor="newPassword">Nova Senha</label>
+                  <input
+                    type="password"
+                    id="newPassword"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-accent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-300 mb-2" htmlFor="confirmPassword">Confirmar Nova Senha</label>
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-accent"
+                  />
+                </div>
+                <button type="submit" className="w-full bg-accent hover:bg-accent-dark text-white font-bold py-3 px-4 rounded transition duration-300">
+                  Salvar Nova Senha
+                </button>
+              </form>
+              {message && <p className="mt-4 text-center text-accent">{message}</p>}
+            </div>
+          </main>
         </div>
       </div>
     )

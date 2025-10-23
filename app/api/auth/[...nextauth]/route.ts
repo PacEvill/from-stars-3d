@@ -6,12 +6,9 @@ import prisma from "@/lib/prisma"; // Import from lib/prisma
 import bcrypt from "bcryptjs"; // Para comparar senhas
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma, {
-    user: 'usuario',
-    account: 'account',
-    session: 'session',
-    verificationToken: 'VerificationToken',
-  }),
+  // @next-auth/prisma-adapter v1 expects a single prisma client argument.
+  // Model mapping would require adapter configuration or schema changes; keep adapter call simple.
+  adapter: PrismaAdapter(prisma as any),
   providers: [
     // GoogleProvider({
     //   clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -61,7 +58,10 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const isPasswordValid = await bcrypt.compare(credentials.senha, user.senha);
+  // Protege contra user.senha ser null (campo opcional no schema)
+  if (!user.senha) return null
+
+  const isPasswordValid = await bcrypt.compare(credentials.senha, user.senha);
         if (!isPasswordValid) {
           return null;
         }

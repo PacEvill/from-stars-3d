@@ -46,6 +46,8 @@ model Usuario {
   Carrinho      Carrinho?
   accounts      Account[]
   sessions      Session[]
+  enderecos     Endereco[]
+  pedidos       Pedido[]
 }
 
 model VerificationToken {
@@ -95,6 +97,7 @@ model Produto {
   Material        Material       @relation(fields: [materialId], references: [id])
   Usuario         Usuario        @relation(fields: [usuarioId], references: [id])
   ItemCarrinho    ItemCarrinho[]
+  itensPedido     ItemPedido[]
 }
 
 model Carrinho {
@@ -113,4 +116,51 @@ model ItemCarrinho {
   Produto    Produto  @relation(fields: [produtoId], references: [id])
 
   @@unique([carrinhoId, produtoId]) // Garante que um produto só aparece uma vez no carrinho
+}
+
+model Endereco {
+  id          Int      @id @default(autoincrement())
+  rua         String
+  numero      String
+  cidade      String
+  estado      String
+  cep         String
+  complemento String?
+  usuarioId   Int
+  Usuario     Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  pedidos     Pedido[]
+}
+
+model Pedido {
+  id              Int          @id @default(autoincrement())
+  usuarioId       Int
+  enderecoId      Int
+  status          String       @default("Pendente") // Ex: Pendente, Em processamento, Enviado, Entregue
+  valorTotal      Float
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  Usuario         Usuario      @relation(fields: [usuarioId], references: [id])
+  Endereco        Endereco     @relation(fields: [enderecoId], references: [id])
+  itens           ItemPedido[]
+}
+
+model ItemPedido {
+  id         Int     @id @default(autoincrement())
+  pedidoId   Int
+  produtoId  Int
+  quantidade Int
+  preco      Float // Preço do produto no momento da compra
+  Pedido     Pedido  @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
+  Produto    Produto @relation(fields: [produtoId], references: [id])
+
+  @@unique([pedidoId, produtoId])
+}
+
+// Modelo para portfólio — usado pelo endpoint app/api/portfolio
+model Portfolio {
+  id        Int      @id @default(autoincrement())
+  titulo    String
+  descricao String
+  imagem    String
+  createdAt DateTime @default(now())
 }
