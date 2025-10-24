@@ -1,24 +1,14 @@
 import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
-import { IncomingForm } from 'formidable';
 import path from 'path';
-import fs from 'fs/promises'; // Usar fs/promises para async/await
-
-
-
-// Desabilita o body-parser padrão do Next.js para lidar com FormData manualmente
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+import fs from 'fs/promises';
 
 export async function GET() {
   try {
     const orcamentos = await prisma.orcamento.findMany({
       include: {
-        Produto: true, // Inclui os dados do produto relacionado
-        Usuario: true,   // Inclui os dados do usuário relacionado
+        Produto: true,
+        Usuario: true,
       },
     });
     return NextResponse.json(orcamentos, { status: 200 });
@@ -32,43 +22,30 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    // Cria o diretório de uploads se não existir
     const uploadDir = path.join(process.cwd(), 'public', 'uploads');
     await fs.mkdir(uploadDir, { recursive: true });
 
-    const form = new IncomingForm({
-      uploadDir: uploadDir,
-      keepExtensions: true,
-      maxFileSize: 5 * 1024 * 1024, // 5MB
-    });
+    // Usamos a API Web FormData disponível em Request do App Router
+    const formData = await request.formData();
 
-    // Promisify form.parse
-    const parseForm = () => {
-      return new Promise<{ fields: any; files: any }>((resolve, reject) => {
-        form.parse(request as any, (err, fields, files) => {
-          if (err) return reject(err);
-          resolve({ fields, files });
-        });
-      });
-    };
-
-    const { fields, files } = await parseForm();
-
-    const usuarioId = parseInt(fields.usuarioId[0]);
-    const produtoId = parseInt(fields.produtoId[0]);
-    const quantidade = parseInt(fields.quantidade[0]);
-    const valorTotal = parseFloat(fields.valorTotal[0]);
-    const status = fields.status[0];
+    const usuarioId = Number(formData.get('usuarioId')) || 0;
+    const produtoId = Number(formData.get('produtoId')) || 0;
+    const quantidade = Number(formData.get('quantidade')) || 0;
+    const valorTotal = parseFloat(String(formData.get('valorTotal'))) || 0;
+    const status = String(formData.get('status') || '');
     let arquivoUrl: string | undefined;
 
-    if (files.arquivo && files.arquivo[0]) {
-      const file = files.arquivo[0];
-      const fileName = path.basename(file.filepath);
-      arquivoUrl = `/uploads/${fileName}`; // URL pública do arquivo
+    const arquivo = formData.get('arquivo') as File | null;
+    if (arquivo && arquivo.name) {
+      // prefix para evitar colisões simples
+      const fileName = `${Date.now()}-${path.basename(arquivo.name)}`;
+      const arrayBuffer = await arquivo.arrayBuffer();
+      await fs.writeFile(path.join(uploadDir, fileName), Buffer.from(arrayBuffer));
+      arquivoUrl = `/uploads/${fileName}`;
     }
 
     if (!usuarioId || !produtoId || !quantidade || !valorTotal || !status) {
-      return NextResponse.json({ message: 'Todos os campos obrigatórios (exceto arquivo) são necessários para criar um orçamento.' }, { status: 400 });
+      return NextResponse.json({ message: 'Todos os campos obrigatórios (exceto arquivo) são necessários.' }, { status: 400 });
     }
 
     const novoOrcamento = await prisma.orcamento.create({
@@ -78,7 +55,7 @@ export async function POST(request: Request) {
         quantidade,
         valorTotal,
         status,
-        arquivoUrl, // Adiciona a URL do arquivo, se existir
+        arquivoUrl,
       },
     });
 

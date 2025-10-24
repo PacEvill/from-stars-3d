@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
-import { PrismaClient } from '@/app/generated/prisma'
-
-const prisma = new PrismaClient()
+import prisma from '@/lib/prisma'
 
 // PUT: Atualiza a quantidade de um item
 export async function PUT(request: Request, { params }: { params: { itemId: string } }) {
@@ -25,7 +23,7 @@ export async function PUT(request: Request, { params }: { params: { itemId: stri
     }
     return NextResponse.json({ message: 'Carrinho atualizado' })
   } catch (error) {
-    console.error(`Erro ao atualizar o item ${itemId}:`, error)
+    console.error(`Erro ao atualizar o item:`, error)
     return NextResponse.json({ error: 'Erro ao atualizar o item' }, { status: 500 })
   }
 }
@@ -40,7 +38,7 @@ export async function DELETE(request: Request, { params }: { params: { itemId: s
     await prisma.itemCarrinho.delete({ where: { id: itemId } })
     return NextResponse.json({ message: 'Item removido do carrinho' })
   } catch (error) {
-    console.error(`Erro ao remover o item ${itemId}:`, error)
+    console.error('Erro ao remover o item:', error)
     return NextResponse.json({ error: 'Erro ao remover o item' }, { status: 500 })
   }
 }
