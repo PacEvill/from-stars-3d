@@ -5,7 +5,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/lib/prisma"; // Import from lib/prisma
 import bcrypt from "bcryptjs"; // Para comparar senhas
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   // @next-auth/prisma-adapter v1 expects a single prisma client argument.
   // Model mapping would require adapter configuration or schema changes; keep adapter call simple.
   adapter: PrismaAdapter(prisma as any),
