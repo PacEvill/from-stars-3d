@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import prisma from '@/lib/prisma';
 
-// Esta página será re-gerada estaticamente a cada 1 hora, garantindo que os dados não fiquem obsoletos.
-export const revalidate = 3600;
+// Forçar a página a ser dinâmica para evitar chamadas ao DB durante build
+export const dynamic = 'force-dynamic';
 
 export default async function MaterialGuidePage() {
   const materials = await prisma.material.findMany();

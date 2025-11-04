@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Heart, Palette, Sparkles } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 const AboutPreview = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
@@ -24,7 +24,7 @@ const AboutPreview = () => {
   ]
 
   // Função para mudar para uma imagem aleatória
-  const changeToRandomImage = () => {
+  const changeToRandomImage = useCallback(() => {
     setCurrentImageIndex(prevIndex => {
       let newIndex
       do {
@@ -32,13 +32,13 @@ const AboutPreview = () => {
       } while (newIndex === prevIndex && artistImages.length > 1)
       return newIndex
     })
-  }
+  }, [artistImages.length])
 
   // Efeito para mudar imagem automaticamente a cada 4 segundos
   useEffect(() => {
     const interval = setInterval(changeToRandomImage, 4000)
     return () => clearInterval(interval)
-  }, [])
+  }, [changeToRandomImage])
 
   return (
     <section className="py-20 bg-gray-800">
