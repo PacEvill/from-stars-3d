@@ -39,4 +39,4 @@ services:
         fromService:
           type: web
           name: from-stars-3d-app
-          property: url
+          envVarKey: RENDER_EXTERNAL_URL
