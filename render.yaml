@@ -1,0 +1,42 @@
+# Arquivo de configuração para deploy na Render
+# https://render.com/docs/blueprint-spec
+
+databases:
+  - name: from-stars-3d-db
+    databaseName: fromstars3d_db
+    user: fromstars_user
+    plan: free # 'free' é ótimo para começar, mas considere planos pagos para produção
+
+services:
+  - type: web
+    name: from-stars-3d-app
+    env: node
+    region: oregon # Escolha a região mais próxima de seus usuários
+    plan: free # 'free' para desenvolvimento/hobby, 'starter' ou superior para produção
+    
+    # Comando para construir o projeto.
+    # Instala dependências, gera o Prisma Client, aplica migrações e constrói a aplicação Next.js.
+    buildCommand: "npm install && npx prisma generate && npx prisma migrate deploy && npm run build"
+    
+    # Comando para iniciar a aplicação.
+    startCommand: "npm start"
+    
+    # Variáveis de ambiente
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: from-stars-3d-db
+          property: connectionString
+      
+      # O NextAuth precisa de um segredo para assinar os JWTs.
+      # 'generateValue: true' faz com que a Render gere um valor aleatório e seguro no primeiro deploy.
+      - key: NEXTAUTH_SECRET
+        generateValue: true
+        
+      # URL da sua aplicação. A Render define a variável de ambiente PORT automaticamente.
+      # O valor é preenchido automaticamente com a URL do seu serviço web na Render.
+      - key: NEXTAUTH_URL
+        fromService:
+          type: web
+          name: from-stars-3d-app
+          property: url
