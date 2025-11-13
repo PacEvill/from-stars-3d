@@ -73,7 +73,7 @@ const Header = () => {
             <User size={20} className="mr-1" />
             Perfil
           </Link>
-          <button onClick={() => signOut()} className="flex items-center text-secondary hover:text-accent transition-colors duration-300">
+          <button onClick={() => signOut({ callbackUrl: '/' })} className="flex items-center text-secondary hover:text-accent transition-colors duration-300">
             <LogOut size={20} className="mr-1" />
             Sair
           </button>
@@ -112,7 +112,7 @@ const Header = () => {
                 <User size={20} className="mr-2" />
                 Perfil
             </Link>
-            <button onClick={() => { signOut(); setIsMenuOpen(false); }} className="flex items-center w-full text-left text-secondary hover:text-accent transition-colors duration-300 font-medium py-2">
+            <button onClick={() => { signOut({ callbackUrl: '/' }); setIsMenuOpen(false); }} className="flex items-center w-full text-left text-secondary hover:text-accent transition-colors duration-300 font-medium py-2">
                 <LogOut size={20} className="mr-2" />
                 Sair
             </button>
