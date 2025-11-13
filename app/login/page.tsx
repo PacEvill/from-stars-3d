@@ -32,8 +32,18 @@ export default function LoginPage() {
       if (result?.error) {
         setError(result.error === 'CredentialsSignin' ? 'Email ou senha inválidos.' : result.error)
       } else {
-        // Login bem-sucedido
-        router.push('/') // Redireciona para a página de home
+        // Login bem-sucedido: verificar sessão para redirecionar admin
+        try {
+          const res = await fetch('/api/auth/session')
+          const session = await res.json()
+          if (session?.user?.isAdmin) {
+            router.replace('/admin')
+          } else {
+            router.replace('/')
+          }
+        } catch {
+          router.replace('/')
+        }
       }
     } catch (err) {
       console.error('Erro na requisição de login:', err)

@@ -1,7 +1,17 @@
 import React from 'react';
 import Link from 'next/link';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions';
+import { redirect } from 'next/navigation';
 
-const AdminDashboard = () => {
+const AdminDashboard = async () => {
+  const session = await getServerSession(authOptions)
+  if (!session) {
+    redirect('/login')
+  }
+  if (!(session.user as any)?.isAdmin) {
+    redirect('/')
+  }
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold text-center mb-8">Painel Administrativo</h1>

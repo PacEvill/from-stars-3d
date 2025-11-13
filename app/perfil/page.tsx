@@ -14,6 +14,11 @@ export default function ProfilePage() {
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [message, setMessage] = useState('')
+  const [profileImage, setProfileImage] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    if (session?.user?.image) setProfileImage(session.user.image)
+  }, [session?.user?.image])
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -96,14 +101,9 @@ export default function ProfilePage() {
         throw new Error(data.error || 'Falha ao atualizar a imagem.')
       }
 
-      // Atualiza a sessão do NextAuth para refletir a nova imagem
-      await update({
-        ...session,
-        user: {
-          ...session?.user,
-          image: data.imageUrl,
-        },
-      })
+      // Atualiza a sessão do NextAuth e estado local para refletir a nova imagem
+      await update({ user: { image: data.imageUrl } } as any)
+      setProfileImage(data.imageUrl)
 
       setMessage(data.message)
     } catch (error: any) {
@@ -143,11 +143,10 @@ export default function ProfilePage() {
             <div className="bg-gray-800 p-8 rounded-lg shadow-lg flex items-center space-x-6">
               <div className="relative w-24 h-24 flex-shrink-0">
                 <Image
-                  src={session.user.image || '/default-avatar.svg'}
+                  src={profileImage || '/default-avatar.svg'}
                   alt="Foto de Perfil"
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-full"
+                  fill
+                  className="rounded-full object-cover"
                 />
               </div>
               <div>

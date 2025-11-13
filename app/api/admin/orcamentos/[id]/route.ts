@@ -15,6 +15,10 @@ export async function PATCH(
       return NextResponse.json({ error: 'Não autenticado.' }, { status: 401 })
     }
 
+    if (!(session.user as any).isAdmin) {
+      return NextResponse.json({ error: 'Acesso negado.' }, { status: 403 })
+    }
+
     const { status, valorTotal } = await request.json()
     const orcamentoId = parseInt(params.id)
 
@@ -50,6 +54,10 @@ export async function DELETE(
 
     if (!session || !session.user?.email) {
       return NextResponse.json({ error: 'Não autenticado.' }, { status: 401 })
+    }
+
+    if (!(session.user as any).isAdmin) {
+      return NextResponse.json({ error: 'Acesso negado.' }, { status: 403 })
     }
 
     const orcamentoId = parseInt(params.id)

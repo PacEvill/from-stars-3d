@@ -13,6 +13,7 @@ interface Orcamento {
   valorTotal: number
   status: string
   arquivoUrl: string | null
+  imagensRef: string | null
   Usuario: {
     id: number
     nome: string | null
@@ -23,6 +24,7 @@ interface Orcamento {
     nome: string
     descricao: string
     categoria: string | null
+    imagem?: string | null
   }
 }
 
@@ -46,9 +48,14 @@ export default function AdminOrcamentosPage() {
 
   useEffect(() => {
     if (status === 'authenticated') {
+      // Verificação de admin no cliente
+      if (!(session?.user as any)?.isAdmin) {
+        router.push('/')
+        return
+      }
       fetchOrcamentos()
     }
-  }, [status])
+  }, [status, session])
 
   const fetchOrcamentos = async () => {
     try {
@@ -212,16 +219,48 @@ export default function AdminOrcamentosPage() {
                     </div>
                   </td>
                   <td className="py-3 px-6 text-left">
-                    <div>
-                      <p className="font-semibold text-sm">{orc.Produto.nome}</p>
-                      {orc.arquivoUrl && (
-                        <button
-                          onClick={() => downloadArquivo(orc.arquivoUrl!, orc.Produto.nome)}
-                          className="text-xs text-blue-400 hover:underline mt-1"
-                        >
-                          📥 Baixar arquivo
-                        </button>
+                    <div className="flex items-center gap-3">
+                      {orc.Produto.imagem && (
+                        <img src={orc.Produto.imagem} alt="ref" className="w-10 h-10 rounded object-cover border border-gray-600" />
                       )}
+                      <div>
+                        <p className="font-semibold text-sm">{orc.Produto.nome}</p>
+                        {orc.arquivoUrl && (
+                          <button
+                            onClick={() => downloadArquivo(orc.arquivoUrl!, orc.Produto.nome)}
+                            className="text-xs text-blue-400 hover:underline mt-1 block"
+                          >
+                            📥 Baixar arquivo principal
+                          </button>
+                        )}
+                        {orc.imagensRef && (() => {
+                          try {
+                            const imagens = JSON.parse(orc.imagensRef) as string[]
+                            return imagens.length > 0 ? (
+                              <div className="mt-2">
+                                <p className="text-xs text-gray-400 mb-1">{imagens.length} imagens de referência:</p>
+                                <div className="flex gap-1 flex-wrap">
+                                  {imagens.map((img, idx) => (
+                                    <button
+                                      key={idx}
+                                      onClick={() => downloadArquivo(img, `referencia-${idx + 1}.jpg`)}
+                                      className="relative group"
+                                      title="Clique para baixar"
+                                    >
+                                      <img src={img} alt={`Ref ${idx + 1}`} className="w-8 h-8 rounded object-cover border border-gray-600 hover:border-blue-400 transition" />
+                                      <span className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition text-white text-xs">
+                                        ↓
+                                      </span>
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            ) : null
+                          } catch {
+                            return null
+                          }
+                        })()}
+                      </div>
                     </div>
                   </td>
                   <td className="py-3 px-6 text-left">

@@ -12,9 +12,10 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Não autenticado.' }, { status: 401 })
     }
 
-    // TODO: Adicionar verificação de admin
-    // const user = await prisma.usuario.findUnique({ where: { email: session.user.email } })
-    // if (!user?.isAdmin) { return NextResponse.json({ error: 'Acesso negado.' }, { status: 403 }) }
+    // Verificação de admin
+    if (!(session.user as any).isAdmin) {
+      return NextResponse.json({ error: 'Acesso negado.' }, { status: 403 })
+    }
 
     const orcamentos = await prisma.orcamento.findMany({
       include: {
@@ -31,6 +32,7 @@ export async function GET(request: Request) {
             nome: true,
             descricao: true,
             categoria: true,
+            imagem: true,
           }
         }
       },

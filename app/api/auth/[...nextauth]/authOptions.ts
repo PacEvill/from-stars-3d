@@ -44,6 +44,7 @@ export const authOptions: AuthOptions = {
           email: user.email,
           name: user.nome || undefined,
           image: user.imagem || undefined,
+          isAdmin: (user as any).isAdmin ?? false,
         };
 
         return authUser;
@@ -58,4 +59,22 @@ export const authOptions: AuthOptions = {
     strategy: "jwt"
   },
   secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    async jwt({ token, user }) {
+      // Persistir id
+      if (user) {
+        token.id = (user as any).id
+        // Propagar isAdmin do user retornado
+        token.isAdmin = (user as any).isAdmin ?? false
+      }
+      return token
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = String(token.id)
+        session.user.isAdmin = Boolean((token as any).isAdmin)
+      }
+      return session
+    }
+  }
 };

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 
 const BudgetPage = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [referenceImages, setReferenceImages] = useState<File[]>([]);
   const [fileName, setFileName] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -11,23 +12,57 @@ const BudgetPage = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
-      const allowedTypes = ['model/stl', 'application/octet-stream', 'model/obj'];
-      if (allowedTypes.includes(file.type) || file.name.endsWith('.stl') || file.name.endsWith('.obj')) {
+      const is3D = ['model/stl', 'application/octet-stream', 'model/obj'].includes(file.type) || file.name.toLowerCase().endsWith('.stl') || file.name.toLowerCase().endsWith('.obj')
+      const isImage = file.type.startsWith('image/') || ['.jpg','.jpeg','.png','.webp','.gif'].some(ext => file.name.toLowerCase().endsWith(ext))
+      if (is3D || isImage) {
         setSelectedFile(file);
         setFileName(file.name);
         setMessage('');
       } else {
         setSelectedFile(null);
         setFileName('');
-        setMessage('Por favor, selecione um arquivo .STL ou .OBJ.');
+        setMessage('Por favor, selecione um arquivo .STL, .OBJ ou uma imagem (JPG/PNG/WEBP/GIF).');
       }
     }
   };
 
+  const handleReferenceImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const files = Array.from(event.target.files)
+      const validFiles = files.filter(file => file.type.startsWith('image/'))
+      
+      if (validFiles.length !== files.length) {
+        setMessage('Algumas imagens não são válidas. Use JPG, PNG, WEBP ou GIF.')
+        return
+      }
+
+      // Limitar a 5 imagens
+      if (validFiles.length > 5) {
+        setMessage('Máximo de 5 imagens de referência permitidas.')
+        return
+      }
+
+      // Validar tamanho de cada imagem (5MB cada)
+      const maxSize = 5 * 1024 * 1024
+      const oversized = validFiles.some(file => file.size > maxSize)
+      if (oversized) {
+        setMessage('Uma ou mais imagens excedem 5MB.')
+        return
+      }
+
+      setReferenceImages(validFiles)
+      setMessage('')
+    }
+  }
+
+  const removeReferenceImage = (index: number) => {
+    setReferenceImages(prev => prev.filter((_, i) => i !== index))
+  }
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!selectedFile) {
-      setMessage('Por favor, selecione um arquivo para upload.');
+      setMessage('Por favor, selecione um arquivo (.STL/.OBJ ou uma imagem) para upload.');
       return;
     }
 
@@ -47,6 +82,12 @@ const BudgetPage = () => {
     formData.append('file', selectedFile);
     formData.append('email', emailInput.value);
     formData.append('message', messageInput.value || '');
+    
+    // Adicionar múltiplas imagens de referência
+    referenceImages.forEach((img, index) => {
+      formData.append(`referenceImage${index}`, img)
+    })
+    formData.append('referenceImageCount', String(referenceImages.length))
 
     try {
       const response = await fetch('/api/orcamento', {
@@ -62,6 +103,7 @@ const BudgetPage = () => {
 
       setMessage(data.message);
       setSelectedFile(null);
+      setReferenceImages([]);
       setFileName('');
       form.reset();
     } catch (error) {
@@ -75,12 +117,12 @@ const BudgetPage = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold text-center mb-8">Solicitar Orçamento</h1>
-      <p className="text-lg text-center mb-12">Envie seu arquivo 3D (.STL ou .OBJ) para receber um orçamento personalizado.</p>
+  <p className="text-lg text-center mb-12">Envie seu arquivo 3D (.STL ou .OBJ) ou uma imagem de referência para receber um orçamento personalizado.</p>
 
       <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
         <div className="mb-6">
           <label htmlFor="file-upload" className="block text-gray-300 text-sm font-bold mb-2">
-            Upload do Arquivo 3D (.STL ou .OBJ):
+            Upload do Arquivo (.STL, .OBJ ou Imagem):
           </label>
           <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-md">
             <div className="space-y-1 text-center">
@@ -104,15 +146,51 @@ const BudgetPage = () => {
                   className="relative cursor-pointer bg-gray-800 rounded-md font-medium text-purple-400 hover:text-purple-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-purple-500"
                 >
                   <span>Carregar um arquivo</span>
-                  <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={handleFileChange} accept=".stl,.obj" />
+                  <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={handleFileChange} accept=".stl,.obj,.jpg,.jpeg,.png,.webp,.gif,image/*" />
                 </label>
                 <p className="pl-1">ou arraste e solte</p>
               </div>
               <p className="text-xs text-gray-500">
-                {fileName ? fileName : 'STL, OBJ até 10MB'}
+                {fileName ? fileName : 'STL, OBJ até 10MB ou imagem (JPG/PNG/WEBP/GIF) até 5MB'}
               </p>
             </div>
           </div>
+        </div>
+
+        {/* Imagens de Referência (múltiplas) */}
+        <div className="mb-6">
+          <label htmlFor="ref-upload" className="block text-gray-300 text-sm font-bold mb-2">
+            Imagens de referência (opcional, até 5):
+          </label>
+          <input
+            id="ref-upload"
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleReferenceImageChange}
+            className="w-full text-gray-300 text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700"
+          />
+          {referenceImages.length > 0 && (
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              {referenceImages.map((img, index) => (
+                <div key={index} className="relative group">
+                  <img
+                    src={URL.createObjectURL(img)}
+                    alt={`Referência ${index + 1}`}
+                    className="w-full h-24 object-cover rounded border border-gray-600"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeReferenceImage(index)}
+                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    ×
+                  </button>
+                  <p className="text-xs text-gray-400 mt-1 truncate">{img.name}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="mb-6">

@@ -41,6 +41,7 @@ model Usuario {
   emailVerified DateTime?
   senha         String?
   imagem        String?
+  isAdmin       Boolean   @default(false)
   Orcamento     Orcamento[]
   Produto       Produto[]
   Carrinho      Carrinho?
@@ -69,15 +70,16 @@ model Material {
 }
 
 model Orcamento {
-  id         Int     @id @default(autoincrement())
-  usuarioId  Int
-  produtoId  Int
-  quantidade Int
-  valorTotal Float
-  status     String
-  arquivoUrl String? // Novo campo para a URL do arquivo
-  Produto    Produto @relation(fields: [produtoId], references: [id])
-  Usuario    Usuario @relation(fields: [usuarioId], references: [id])
+  id              Int     @id @default(autoincrement())
+  usuarioId       Int
+  produtoId       Int
+  quantidade      Int
+  valorTotal      Float
+  status          String
+  arquivoUrl      String? @db.LongText // Arquivo principal em base64
+  imagensRef      String? @db.LongText // Múltiplas imagens de referência em JSON
+  Produto         Produto @relation(fields: [produtoId], references: [id])
+  Usuario         Usuario @relation(fields: [usuarioId], references: [id])
 }
 
 
