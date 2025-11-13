@@ -31,24 +31,41 @@ const BudgetPage = () => {
       return;
     }
 
+    const form = event.currentTarget;
+    const emailInput = form.elements.namedItem('email') as HTMLInputElement;
+    const messageInput = form.elements.namedItem('message') as HTMLTextAreaElement;
+
+    if (!emailInput.value) {
+      setMessage('Por favor, informe seu e-mail.');
+      return;
+    }
+
     setLoading(true);
     setMessage('Enviando seu arquivo...');
 
     const formData = new FormData();
     formData.append('file', selectedFile);
-    formData.append('fileName', fileName);
-
-    // Aqui você integraria com um serviço de backend para processar o arquivo
-    // Exemplo: fetch('/api/upload-budget', { method: 'POST', body: formData });
+    formData.append('email', emailInput.value);
+    formData.append('message', messageInput.value || '');
 
     try {
-      // Simulação de upload
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      setMessage('Arquivo enviado com sucesso! Entraremos em contato em breve com seu orçamento.');
+      const response = await fetch('/api/orcamento', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erro ao enviar orçamento.');
+      }
+
+      setMessage(data.message);
       setSelectedFile(null);
       setFileName('');
+      form.reset();
     } catch (error) {
-      setMessage('Erro ao enviar o arquivo. Por favor, tente novamente.');
+      setMessage(error instanceof Error ? error.message : 'Erro ao enviar o arquivo. Por favor, tente novamente.');
       console.error('Upload error:', error);
     } finally {
       setLoading(false);
