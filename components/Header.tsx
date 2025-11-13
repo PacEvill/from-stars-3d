@@ -67,8 +67,21 @@ const Header = () => {
     }
 
     if (status === "authenticated") {
+      const isAdmin = (session?.user as any)?.isAdmin
+      
       return (
         <div className="flex items-center space-x-4">
+          {isAdmin && (
+            <Link href="/admin" className="flex items-center text-purple-400 hover:text-purple-300 transition-colors duration-300 font-semibold">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+              Admin
+            </Link>
+          )}
           <Link href="/perfil" className="flex items-center text-secondary hover:text-accent transition-colors duration-300">
             <User size={20} className="mr-1" />
             Perfil
