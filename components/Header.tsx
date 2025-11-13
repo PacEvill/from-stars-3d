@@ -86,7 +86,12 @@ const Header = () => {
             <User size={20} className="mr-1" />
             Perfil
           </Link>
-          <button onClick={() => signOut({ callbackUrl: '/' })} className="flex items-center text-secondary hover:text-accent transition-colors duration-300">
+          <button onClick={() => {
+            const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : '/')
+            // Se estiver em localhost, redireciona para '/', em produção usar baseUrl raiz
+            const callbackUrl = baseUrl.includes('localhost') ? '/' : baseUrl
+            signOut({ callbackUrl })
+          }} className="flex items-center text-secondary hover:text-accent transition-colors duration-300">
             <LogOut size={20} className="mr-1" />
             Sair
           </button>
@@ -125,7 +130,12 @@ const Header = () => {
                 <User size={20} className="mr-2" />
                 Perfil
             </Link>
-            <button onClick={() => { signOut({ callbackUrl: '/' }); setIsMenuOpen(false); }} className="flex items-center w-full text-left text-secondary hover:text-accent transition-colors duration-300 font-medium py-2">
+            <button onClick={() => { 
+              const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : '/')
+              const callbackUrl = baseUrl.includes('localhost') ? '/' : baseUrl
+              signOut({ callbackUrl }); 
+              setIsMenuOpen(false); 
+            }} className="flex items-center w-full text-left text-secondary hover:text-accent transition-colors duration-300 font-medium py-2">
                 <LogOut size={20} className="mr-2" />
                 Sair
             </button>

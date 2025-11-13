@@ -87,7 +87,11 @@ export default function LoginPage() {
         </form>
         <div className="mt-6 text-center">
           <button
-            onClick={() => signIn('google', { callbackUrl: '/' })}
+            onClick={() => {
+              const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : '/')
+              const callbackUrl = baseUrl.includes('localhost') ? '/' : baseUrl
+              signIn('google', { callbackUrl })
+            }}
             className="btn-secondary w-full flex items-center justify-center space-x-2"
             disabled={loading}
           >

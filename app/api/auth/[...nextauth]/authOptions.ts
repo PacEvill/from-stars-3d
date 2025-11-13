@@ -11,6 +11,13 @@ export const authOptions: AuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+      authorization: {
+        params: {
+          prompt: 'consent',
+          access_type: 'offline',
+          response_type: 'code'
+        }
+      }
     }),
     CredentialsProvider({
       name: "credentials",
@@ -63,6 +70,7 @@ export const authOptions: AuthOptions = {
   session: {
     strategy: "jwt"
   },
+  // Garantir que NEXTAUTH_URL esteja correto em produção (definir na plataforma de deploy)
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user, account }) {
