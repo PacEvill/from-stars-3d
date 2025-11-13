@@ -1,3 +1,5 @@
+'use client'
+
 import { motion } from 'framer-motion'
 import { Shapes, Palette, Paintbrush, Layers, Sparkles, ShieldCheck, LifeBuoy, Clock, Printer } from 'lucide-react'
 import Link from 'next/link'
