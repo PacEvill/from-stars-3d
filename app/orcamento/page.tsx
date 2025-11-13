@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 const BudgetPage = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -172,23 +173,29 @@ const BudgetPage = () => {
           />
           {referenceImages.length > 0 && (
             <div className="mt-4 grid grid-cols-3 gap-2">
-              {referenceImages.map((img, index) => (
-                <div key={index} className="relative group">
-                  <img
-                    src={URL.createObjectURL(img)}
-                    alt={`Referência ${index + 1}`}
-                    className="w-full h-24 object-cover rounded border border-gray-600"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeReferenceImage(index)}
-                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    ×
-                  </button>
-                  <p className="text-xs text-gray-400 mt-1 truncate">{img.name}</p>
-                </div>
-              ))}
+              {referenceImages.map((img, index) => {
+                const objectUrl = URL.createObjectURL(img)
+                return (
+                  <div key={index} className="relative group">
+                    <Image
+                      src={objectUrl}
+                      alt={`Referência ${index + 1}`}
+                      width={200}
+                      height={96}
+                      className="w-full h-24 object-cover rounded border border-gray-600"
+                      unoptimized
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeReferenceImage(index)}
+                      className="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      ×
+                    </button>
+                    <p className="text-xs text-gray-400 mt-1 truncate">{img.name}</p>
+                  </div>
+                )
+              })}
             </div>
           )}
         </div>

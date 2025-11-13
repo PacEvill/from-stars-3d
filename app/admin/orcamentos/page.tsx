@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -50,12 +51,13 @@ export default function AdminOrcamentosPage() {
     if (status === 'authenticated') {
       // Verificação de admin no cliente
       if (!(session?.user as any)?.isAdmin) {
-        router.push('/')
-        return
+        router.push('/');
+        return;
       }
-      fetchOrcamentos()
+      fetchOrcamentos();
     }
-  }, [status, session])
+    // Inclui router como dependência para satisfazer regra react-hooks/exhaustive-deps sem alterar lógica.
+  }, [status, session, router])
 
   const fetchOrcamentos = async () => {
     try {
@@ -221,7 +223,14 @@ export default function AdminOrcamentosPage() {
                   <td className="py-3 px-6 text-left">
                     <div className="flex items-center gap-3">
                       {orc.Produto.imagem && (
-                        <img src={orc.Produto.imagem} alt="ref" className="w-10 h-10 rounded object-cover border border-gray-600" />
+                        <Image
+                          src={orc.Produto.imagem}
+                          alt="ref"
+                          width={40}
+                          height={40}
+                          className="w-10 h-10 rounded object-cover border border-gray-600"
+                          unoptimized
+                        />
                       )}
                       <div>
                         <p className="font-semibold text-sm">{orc.Produto.nome}</p>
@@ -247,7 +256,14 @@ export default function AdminOrcamentosPage() {
                                       className="relative group"
                                       title="Clique para baixar"
                                     >
-                                      <img src={img} alt={`Ref ${idx + 1}`} className="w-8 h-8 rounded object-cover border border-gray-600 hover:border-blue-400 transition" />
+                                      <Image
+                                        src={img}
+                                        alt={`Ref ${idx + 1}`}
+                                        width={32}
+                                        height={32}
+                                        className="w-8 h-8 rounded object-cover border border-gray-600 hover:border-blue-400 transition"
+                                        unoptimized
+                                      />
                                       <span className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition text-white text-xs">
                                         ↓
                                       </span>
