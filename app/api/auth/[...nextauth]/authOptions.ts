@@ -66,24 +66,42 @@ export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user, account }) {
-      // Persistir id e buscar isAdmin do banco
+      // Persistir id, isAdmin e imagem do usuário no token JWT.
+      // Isso permite que a sessão (session callback) reflita mudanças como atualização da foto de perfil.
       if (user) {
         token.id = (user as any).id
-        
-        // Se for login com Google, buscar isAdmin do banco
-        if (account?.provider === 'google') {
-          try {
-            const dbUser = await prisma.usuario.findUnique({
-              where: { email: user.email! }
-            })
-            token.isAdmin = (dbUser as any)?.isAdmin ?? false
-          } catch (error) {
-            console.error('[AUTH] Erro ao buscar isAdmin:', error)
-            token.isAdmin = false
+        // Se o objeto user (primeiro login) já tiver imagem vinda do authorize, manter.
+        if ((user as any).image) {
+          token.image = (user as any).image
+        }
+
+        // Carregar flags/atributos adicionais do banco (isAdmin + imagem mais recente)
+        try {
+          const dbUser = await prisma.usuario.findUnique({
+            where: { email: user.email! }
+          })
+          if (dbUser) {
+            token.isAdmin = (dbUser as any).isAdmin ?? false
+            // Sempre sincronizar imagem do banco (pode ter sido atualizada em outra aba/request)
+            if (dbUser.imagem) {
+              token.image = dbUser.imagem
+            }
           }
-        } else {
-          // Para Credentials, usar o valor já propagado
-          token.isAdmin = (user as any).isAdmin ?? false
+        } catch (error) {
+          console.error('[AUTH] Erro ao buscar dados do usuário (isAdmin/imagem):', error)
+          // Fallback: manter valores já presentes
+          token.isAdmin = (token as any).isAdmin ?? false
+        }
+      } else if (token.email) {
+        // Requisições subsequentes (sem objeto user). Revalidar sempre para refletir alterações recentes (ex: upload de avatar).
+        try {
+          const dbUser = await prisma.usuario.findUnique({ where: { email: token.email as string } })
+          if (dbUser) {
+            token.isAdmin = (dbUser as any).isAdmin ?? (token as any).isAdmin ?? false
+            if (dbUser.imagem) token.image = dbUser.imagem
+          }
+        } catch (error) {
+          console.error('[AUTH] Erro ao revalidar dados do usuário (ciclo subsequente):', error)
         }
       }
       return token
@@ -92,6 +110,10 @@ export const authOptions: AuthOptions = {
       if (session.user) {
         session.user.id = String(token.id)
         session.user.isAdmin = Boolean((token as any).isAdmin)
+        // Propagar imagem se existir no token
+        if ((token as any).image) {
+          session.user.image = (token as any).image as string
+        }
       }
       return session
     }
