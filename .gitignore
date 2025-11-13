@@ -39,6 +39,7 @@ jspm_packages/
 # TypeScript v1 compilation
 *.js.map
 *.d.ts
+!types/**/*.d.ts
 
 # Optional npm cache directory
 .npm
