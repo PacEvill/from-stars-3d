@@ -77,6 +77,7 @@
 
    ⚠️  Use a Internal Database URL (não a External)
    ⚠️  Configure NEXTAUTH_URL com a URL real após deploy
+   ⚠️  Use Node.js 20.11.0 ou superior (Prisma requer >= 18.18)
    ⚠️  Plano Free: app "dorme" após 15min sem uso
    ⚠️  Primeiro acesso após dormir: ~30 segundos
    

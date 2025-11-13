@@ -80,7 +80,7 @@ PASSO 4: CONFIGURAR VARIÁVEIS DE AMBIENTE
 │                                                               │
 │     ┌─ NODE_VERSION ─────────────────────────────────┐      │
 │     │ Key:   NODE_VERSION                             │      │
-│     │ Value: 18.17.0                                  │      │
+│     │ Value: 20.11.0                                  │      │
 │     └─────────────────────────────────────────────────┘      │
 │                                                               │
 │     ┌─ DATABASE_URL ────────────────────────────────┐       │

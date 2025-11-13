@@ -26,7 +26,7 @@ git push origin main
 
 #### Variáveis de Ambiente (Environment):
 ```env
-NODE_VERSION=18.17.0
+NODE_VERSION=20.11.0
 DATABASE_URL=mysql://[copiar_url_do_banco]
 NEXTAUTH_SECRET=[Generate]
 NEXTAUTH_URL=https://[seu-app].onrender.com
