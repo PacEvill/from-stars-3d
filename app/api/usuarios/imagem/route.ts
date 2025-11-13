@@ -1,36 +1,54 @@
 import { NextResponse } from 'next/server'
-
-// Em uma aplicação real, você usaria um serviço de e-mail como Resend, SendGrid, ou Nodemailer.
-// import { Resend } from 'resend';
-// const resend = new Resend(process.env.RESEND_API_KEY);
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions'
+import prisma from '@/lib/prisma'
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json()
-    const { name, email, subject, message } = body
+    const session = await getServerSession(authOptions)
 
-    // Validação simples dos campos
-    if (!name || !email || !message) {
-      return NextResponse.json({ error: 'Nome, e-mail e mensagem são obrigatórios.' }, { status: 400 })
+    if (!session || !session.user?.email) {
+      return NextResponse.json({ error: 'Não autenticado.' }, { status: 401 })
     }
 
-    // TODO: Implementar o envio de e-mail aqui.
-    // Por enquanto, vamos apenas logar os dados no console do servidor.
-    console.log('Nova mensagem recebida:')
-    console.log({ name, email, subject, message })
+    const formData = await request.formData()
+    const file = formData.get('image') as File | null
 
-    /* Exemplo com Resend:
-    await resend.emails.send({
-      from: 'onboarding@resend.dev',
-      to: 'contato@fromstars3d.com',
-      subject: `Nova mensagem de ${name}: ${subject}`,
-      text: `De: ${email}\n\nMensagem:\n${message}`,
-    });
-    */
+    if (!file) {
+      return NextResponse.json({ error: 'Nenhuma imagem foi enviada.' }, { status: 400 })
+    }
 
-    return NextResponse.json({ message: 'Mensagem enviada com sucesso!' })
+    // Validar tipo de arquivo
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif']
+    if (!validTypes.includes(file.type)) {
+      return NextResponse.json({ error: 'Formato de imagem não suportado. Use JPG, PNG, WEBP ou GIF.' }, { status: 400 })
+    }
+
+    // Validar tamanho (máximo 5MB)
+    const maxSize = 5 * 1024 * 1024 // 5MB
+    if (file.size > maxSize) {
+      return NextResponse.json({ error: 'Imagem muito grande. Tamanho máximo: 5MB.' }, { status: 400 })
+    }
+
+    // Converter arquivo para base64 para armazenar no banco
+    const bytes = await file.arrayBuffer()
+    const buffer = Buffer.from(bytes)
+    const base64Image = `data:${file.type};base64,${buffer.toString('base64')}`
+
+    // Atualizar imagem do usuário no banco
+    const updatedUser = await prisma.usuario.update({
+      where: { email: session.user.email },
+      data: { imagem: base64Image },
+    })
+
+    console.log('[UPLOAD IMAGEM] Imagem atualizada para usuário:', session.user.email)
+
+    return NextResponse.json({
+      message: 'Imagem de perfil atualizada com sucesso!',
+      imageUrl: base64Image,
+    })
   } catch (error) {
-    console.error('Erro ao processar formulário de contato:', error)
-    return NextResponse.json({ error: 'Ocorreu um erro ao enviar a mensagem.' }, { status: 500 })
+    console.error('[UPLOAD IMAGEM] Erro ao atualizar imagem:', error)
+    return NextResponse.json({ error: 'Ocorreu um erro ao atualizar a imagem.' }, { status: 500 })
   }
 }

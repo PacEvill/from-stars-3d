@@ -66,12 +66,28 @@ export default function ProfilePage() {
     const file = e.target.files?.[0]
     if (!file) return
 
-    // Em uma aplicação real, você usaria FormData para enviar o arquivo.
-    // Como estamos simulando, apenas chamamos o endpoint.
+    // Validar tipo de arquivo no frontend
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif']
+    if (!validTypes.includes(file.type)) {
+      setMessage('Formato de imagem não suportado. Use JPG, PNG, WEBP ou GIF.')
+      return
+    }
+
+    // Validar tamanho (máximo 5MB)
+    const maxSize = 5 * 1024 * 1024
+    if (file.size > maxSize) {
+      setMessage('Imagem muito grande. Tamanho máximo: 5MB.')
+      return
+    }
+
     setMessage('Atualizando imagem...')
     try {
+      const formData = new FormData()
+      formData.append('image', file)
+
       const response = await fetch('/api/usuarios/imagem', {
         method: 'POST',
+        body: formData,
       })
 
       const data = await response.json()
