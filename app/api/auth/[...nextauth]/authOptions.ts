@@ -1,12 +1,17 @@
 import { AuthOptions, User } from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    }),
     CredentialsProvider({
       name: "credentials",
       credentials: {
@@ -60,12 +65,26 @@ export const authOptions: AuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async jwt({ token, user }) {
-      // Persistir id
+    async jwt({ token, user, account }) {
+      // Persistir id e buscar isAdmin do banco
       if (user) {
         token.id = (user as any).id
-        // Propagar isAdmin do user retornado
-        token.isAdmin = (user as any).isAdmin ?? false
+        
+        // Se for login com Google, buscar isAdmin do banco
+        if (account?.provider === 'google') {
+          try {
+            const dbUser = await prisma.usuario.findUnique({
+              where: { email: user.email! }
+            })
+            token.isAdmin = (dbUser as any)?.isAdmin ?? false
+          } catch (error) {
+            console.error('[AUTH] Erro ao buscar isAdmin:', error)
+            token.isAdmin = false
+          }
+        } else {
+          // Para Credentials, usar o valor já propagado
+          token.isAdmin = (user as any).isAdmin ?? false
+        }
       }
       return token
     },
