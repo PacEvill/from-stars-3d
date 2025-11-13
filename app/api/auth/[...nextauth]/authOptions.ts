@@ -3,7 +3,6 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-import { Usuario } from "@prisma/client";
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -12,24 +11,29 @@ export const authOptions: AuthOptions = {
       name: "credentials",
       credentials: {
         email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" }
+        // Aceita ambos para compatibilidade com o front atual
+        senha: { label: "Senha", type: "password" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req): Promise<User | null> {
-        if (!credentials?.email || !credentials?.password) {
+        const email = credentials?.email as string | undefined;
+        const senha = (credentials as any)?.senha as string | undefined;
+        const password = (credentials as any)?.password as string | undefined;
+        const providedPassword = senha || password;
+
+        if (!email || !providedPassword) {
           return null;
         }
 
         const user = await prisma.usuario.findUnique({
-          where: {
-            email: credentials.email
-          }
+          where: { email }
         });
 
         if (!user || !user.senha) {
           return null;
         }
 
-        const passwordMatch = await bcrypt.compare(credentials.password, user.senha);
+        const passwordMatch = await bcrypt.compare(providedPassword, user.senha);
 
         if (!passwordMatch) {
           return null;
