@@ -84,9 +84,16 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               <p><span className="font-semibold">Disponibilidade:</span> {product.disponibilidade || 'N/A'}</p>
             </div>
 
-            <p className="text-3xl font-bold text-white mb-6">R$ {product.preco.toFixed(2)}</p>
-
-            <AddToCartButton productId={product.id} disponibilidade={product.disponibilidade} />
+            <div className="mt-6">
+              <Link
+                href={`https://wa.me/5521986333478?text=Olá! Gostaria de fazer um orçamento desta peça: ${encodeURIComponent(`http://localhost:3000/produto/${product.id}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary w-full flex items-center justify-center"
+              >
+                Solicitar Orçamento
+              </Link>
+            </div>
 
             <Link href="/catalogo" className="block text-center mt-4 text-accent hover:underline">
               Voltar ao Catálogo

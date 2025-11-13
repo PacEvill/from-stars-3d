@@ -1,7 +1,7 @@
-import { NextResponse, NextRequest } from "next/server";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import prisma from "@/lib/prisma";
+import { NextResponse, NextRequest } from "next/server";
 
 // GET para buscar os pedidos do usuário
 export async function GET() {

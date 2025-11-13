@@ -76,3 +76,9 @@ package-lock.json
 
 # Prisma generated files
 /app/generated/prisma
+
+# TypeScript build info
+tsconfig.tsbuildinfo
+
+# Temporary files
+cartão*de*visita*.pdf

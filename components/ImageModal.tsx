@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Image from 'next/image'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -24,21 +24,19 @@ const ImageModal = ({
 }: ImageModalProps) => {
 
 
-  const nextImage = () => {
+  const nextImage = useCallback(() => {
     onImageChange((currentIndex + 1) % images.length)
+  }, [currentIndex, images.length, onImageChange])
 
-  }
-
-  const prevImage = () => {
+  const prevImage = useCallback(() => {
     onImageChange((currentIndex - 1 + images.length) % images.length)
-
-  }
-
+  }, [currentIndex, images.length, onImageChange])
 
 
 
 
-  const handleKeyDown = (e: KeyboardEvent) => {
+
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (!isOpen) return
     
     switch (e.key) {
@@ -51,14 +49,13 @@ const ImageModal = ({
       case 'ArrowLeft':
         prevImage()
         break
-
     }
-  }
+  }, [isOpen, nextImage, prevImage, onClose])
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, currentIndex])
+  }, [handleKeyDown])
 
   useEffect(() => {
     if (isOpen) {

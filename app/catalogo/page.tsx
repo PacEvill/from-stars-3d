@@ -1,17 +1,15 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import Image from 'next/image'
-import { useCart } from '@/components/CartProvider'
-import { ShoppingCart } from 'lucide-react'
+import Link from 'next/link'
+import ProductCarousel from '@/components/ProductCarousel'
 
 // Definindo o tipo do produto que vem da API
 interface Produto {
   id: number;
   nome: string;
   descricao: string;
-  preco: number;
   imagem: string;
   categoria: string | null;
   tamanho: string | null;
@@ -21,8 +19,11 @@ interface Produto {
   } | null;
 }
 
+const createCatalogPaths = (folder: string, files: string[]) =>
+  files.map((file) => `/catalogo/${encodeURIComponent(folder)}/${encodeURIComponent(file)}`)
+
 export default function CatalogoPage() {
-  const { addToCart } = useCart()
+
   const [modelos, setModelos] = useState<Produto[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -32,6 +33,23 @@ export default function CatalogoPage() {
   const [filterTamanho, setFilterTamanho] = useState('Todos')
   const [filterDisponibilidade, setFilterDisponibilidade] = useState('Todos')
   const [filteredModelos, setFilteredModelos] = useState<Produto[]>([])
+  const [pageOrigin, setPageOrigin] = useState('')
+
+  const catalogImages: Record<string, string[]> = {
+    'Ahri 1': createCatalogPaths('Ahri 1', ['0.jpg', '1.jpg']),
+    'Ahri 2': createCatalogPaths('Ahri 2', ['0.png', '2.jpg', '3.jpg', '4.jpg']),
+    'Ahri SB': createCatalogPaths('Ahri SB', ['0.jpg', '1.jpg', '2.jpg', '3.jpg']),
+    'Batman': createCatalogPaths('Batman', ['0.jpg', '1.png']),
+    'Booette': createCatalogPaths('Booette', ['0.jpg', '1.jpg', '2.jpg', '3.jpg']),
+    'Bowsette': createCatalogPaths('Bowsette', ['0.jpg', '1.jpg', '2.jpg']),
+    'Furina': createCatalogPaths('Furina', ['0.jpg', '1.jpg', '2.jpg']),
+    'Gwen': createCatalogPaths('Gwen', ['0.jpg', '1.jpg', '2.jpg']),
+    'Levi': createCatalogPaths('Levi', ['1.png', '2.png']),
+    'Maomao': createCatalogPaths('Maomao', ['0.jpg', '1.jpg', '2.jpg']),
+    'Maomao e Jinshi': createCatalogPaths('Maomao e Jinshi', ['0.jpg', '1.jpg', '2.jpg']),
+    'Mikasa': createCatalogPaths('Mikasa', ['0.jpg', '1.jpg']),
+    'Sett': createCatalogPaths('Sett', ['0.jpg', '1.jpg', '2.jpg']),
+  }
 
   // Fetch dos produtos da API
   useEffect(() => {
@@ -48,6 +66,12 @@ export default function CatalogoPage() {
       }
     }
     fetchProdutos()
+  }, [])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setPageOrigin(window.location.origin)
+    }
   }, [])
 
   // Lógica de filtragem
@@ -85,6 +109,15 @@ export default function CatalogoPage() {
     return <div className="min-h-screen bg-primary py-16 px-4 text-center text-white">Carregando produtos...</div>
   }
 
+  const createWhatsappLink = (produtoId: number) => {
+    const baseUrl = 'https://wa.me/5521986333478'
+    const itemUrl = pageOrigin
+      ? `${pageOrigin}/produto/${produtoId}`
+      : `/produto/${produtoId}`
+    const mensagem = `ola gostaria de fazer um orçamento desta peça ${itemUrl}`
+    return `${baseUrl}?text=${encodeURIComponent(mensagem)}`
+  }
+
   return (
     <main className="min-h-screen bg-primary py-16 px-4">
       <div className="max-w-7xl mx-auto">
@@ -108,30 +141,39 @@ export default function CatalogoPage() {
           {filteredModelos.length > 0 ? (
             filteredModelos.map(modelo => (
               <div key={modelo.id} className="card flex flex-col bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105">
-                <Link href={`/produto/${modelo.id}`} className="block">
-                  <div className="w-full h-56 relative bg-gray-900">
-                    <Image 
-                      src={modelo.imagem || '/default-avatar.svg'}
-                      alt={modelo.nome}
-                      layout="fill"
-                      objectFit="cover"
+                <div className="relative">
+                  {catalogImages[modelo.nome]?.length ? (
+                    <ProductCarousel
+                      images={catalogImages[modelo.nome]}
+                      productName={modelo.nome}
+                      className="rounded-b-none"
                     />
-                  </div>
-                  <div className="p-4">
-                    <h2 className="text-xl font-heading font-semibold text-accent mb-2 truncate">{modelo.nome}</h2>
-                    <p className="text-secondary text-sm mb-4 h-10 overflow-hidden">{modelo.descricao}</p>
-                    <p className="text-lg font-bold text-white mb-4">R$ {modelo.preco.toFixed(2)}</p>
-                  </div>
-                </Link>
+                  ) : (
+                    <div className="relative h-56 w-full bg-gray-900">
+                      <Image
+                        src={modelo.imagem || '/default-avatar.svg'}
+                        alt={modelo.nome}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+                </div>
+                <div className="p-4">
+                  <Link href={`/produto/${modelo.id}`}>
+                    <h2 className="text-xl font-heading font-semibold text-accent mb-2 truncate hover:underline">{modelo.nome}</h2>
+                  </Link>
+                  <p className="text-secondary text-sm mb-4 min-h-[2.5rem]">{modelo.descricao}</p>
+                </div>
                 <div className="mt-auto p-4 pt-0">
-                  <button 
-                    onClick={() => addToCart(modelo.id, 1)}
-                    className="btn-primary w-full flex items-center justify-center"
-                    disabled={modelo.disponibilidade === 'Esgotado'}
+                  <a
+                    href={createWhatsappLink(modelo.id)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-primary flex w-full items-center justify-center text-center"
                   >
-                    <ShoppingCart size={18} className="mr-2" />
-                    {modelo.disponibilidade === 'Esgotado' ? 'Esgotado' : 'Adicionar ao Carrinho'}
-                  </button>
+                    Solicitar orçamento
+                  </a>
                 </div>
               </div>
             ))

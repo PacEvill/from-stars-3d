@@ -6,6 +6,12 @@ Este é o repositório oficial da plataforma digital da **From Stars 3D**, um es
 
 O objetivo é criar uma experiência digital imersiva que reflita a qualidade artística e artesanal dos produtos. A plataforma foi desenhada para ser robusta, escalável e otimizada para mecanismos de busca (SEO), garantindo uma base sólida para o crescimento do negócio.
 
+Última atualização (nov/2025):
+- Hero da Home redesenhado com banner carrossel, CTA do WhatsApp e identidade visual roxa.
+- Catálogo sem exibição de preços, com botão “Solicitar orçamento” gerando mensagem dinâmica para o WhatsApp (`5521986333478`).
+- Integração das mídias locais em `public/fotos` (portfólio) e `public/catalogo` (produtos), com galerias/carrosséis responsivos.
+- Páginas `Portfolio` e `Serviços` remodeladas com foco em narrativa, responsividade e CTAs claros.
+
 ---
 
 ## ✨ Tecnologias Principais
@@ -15,7 +21,7 @@ O objetivo é criar uma experiência digital imersiva que reflita a qualidade ar
 - **Banco de Dados:** [PostgreSQL](https://www.postgresql.org/) (ou outro compatível com Prisma)
 - **ORM:** [Prisma](https://www.prisma.io/) para interação com o banco de dados
 - **Estilização:** [Tailwind CSS](https://tailwindcss.com/)
-- **Componentes:** UI Própria, inspirada em designs modernos
+- **Componentes:** UI própria, inspirada em designs modernos
 - **Ícones:** [Lucide React](https://lucide.dev/guide/packages/lucide-react)
 - **Deploy:** Otimizado para [Vercel](https://vercel.com/)
 
@@ -102,18 +108,44 @@ from-star-3d-main/
 ├── app/                # Rotas e páginas (App Router)
 │   ├── api/            # Endpoints da API (Backend)
 │   ├── admin/          # Rotas do painel de administração
-│   ├── (user)/         # Rotas de usuário (ex: catalogo, produto)
+│   ├── catalogo/       # Página do catálogo de produtos (sem preços + CTA WhatsApp)
+│   ├── portfolio/      # Galeria com imagens de /public/catalogo e /public/fotos
+│   ├── servicos/       # Página institucional com fluxo e CTAs
 │   ├── layout.tsx      # Layout principal
 │   └── page.tsx        # Página inicial (Home)
-├── components/         # Componentes React reutilizáveis e agnósticos
+├── components/         # Componentes React reutilizáveis (Hero, Carrosséis, etc.)
 ├── prisma/             # Configuração do banco de dados
 │   ├── migrations/     # Histórico de migrações do banco
 │   └── schema.prisma   # Definição dos modelos de dados
 ├── public/             # Arquivos estáticos (imagens, fontes)
+│   ├── catalogo/       # Imagens do catálogo usadas nos cards/carrosséis
+│   └── fotos/          # Portfólio e assets gerais do site
 ├── .env.example        # Arquivo de exemplo para variáveis de ambiente
 ├── package.json        # Dependências e scripts
 └── tsconfig.json       # Configurações do TypeScript
 ```
+
+---
+
+## 🛒 Lógica de Orçamento via WhatsApp
+
+Em `app/catalogo/page.tsx`, cada item do catálogo possui um botão **“Solicitar orçamento”** que gera automaticamente a URL de contato com o texto:
+
+```
+ola gostaria de fazer um orçamento desta peça https://<origin>/produto/<ID>
+```
+
+O número padrão configurado é `5521986333478`. Ajuste as variáveis ou constantes caso o número oficial seja alterado futuramente.
+
+Na Home (`components/Hero.tsx`) e nas CTAs secundárias (`app/servicos/page.tsx`, `app/portfolio/page.tsx`) o mesmo número é reutilizado para garantir consistência.
+
+---
+
+## 📸 Mídia e Assets
+
+- **Portfólio:** todas as fotos de projetos ficam em `public/fotos/<nome>/` e são exibidas na home (destaques), no Hero e no portfólio completo.
+- **Catálogo:** as imagens de cada produto ficam em `public/catalogo/<Produto>/` e alimentam a galeria/carrossel na página de catálogo.
+- Para adicionar novas imagens, basta criar a pasta correspondente em `public/fotos` ou `public/catalogo`, seguindo o padrão existente. Os componentes ajustam automaticamente o layout responsivo.
 
 ---
 
@@ -123,9 +155,9 @@ Esta é a lista de prioridades atuais para a evolução da plataforma.
 
 - **[P1] Funcionalidades do Usuário:**
   - [ ] Implementar Sistema de Busca global.
-  - [ ] Adicionar Filtros e Ordenação na página de Catálogo.
+  - [ ] Adicionar filtros e ordenação avançada na página de Catálogo.
   - [ ] Desenvolver a Página de Perfil do Usuário (Histórico de Pedidos).
-  - [ ] Criar sistema de Avaliações e Comentários nos produtos.
+  - [ ] Criar sistema de avaliações e comentários nos produtos.
 
 - **[P2] Painel de Administração:**
   - [x] Listar dados existentes (ex: materiais, produtos).
@@ -136,7 +168,7 @@ Esta é a lista de prioridades atuais para a evolução da plataforma.
 - **[P3] Melhorias Técnicas:**
   - [x] SEO dinâmico nas páginas de produto.
   - [ ] Implementar sistema de autenticação robusto com NextAuth.js.
-  - [ ] Otimizar imagens com o componente `<Image>` do Next.js.
+  - [x] Otimizar imagens com o componente `<Image>` do Next.js (agora aplicado em Hero, Catálogo e Portfólio).
 
 ---
 

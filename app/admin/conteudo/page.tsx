@@ -2,6 +2,9 @@ import prisma from '@/lib/prisma';
 import { PlusCircle } from 'lucide-react';
 import Link from 'next/link';
 
+// Forçar a página a ser dinâmica para evitar chamadas ao DB durante build
+export const dynamic = 'force-dynamic';
+
 export default async function AdminContentPage() {
   // Busca todos os materiais no banco, ordenados por ID.
   const materials = await prisma.material.findMany({

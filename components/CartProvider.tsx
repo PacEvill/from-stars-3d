@@ -128,6 +128,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  // Se o status da sessão ainda estiver carregando, não renderizamos o conteúdo ainda
+  if (status === 'loading') {
+    return null;
+  }
+
   return (
     <CartContext.Provider value={{ cart, loading, isCartOpen, openCart, closeCart, addToCart, updateItemQuantity, removeFromCart }}>
       {children}

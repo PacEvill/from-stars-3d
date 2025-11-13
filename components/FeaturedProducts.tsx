@@ -8,76 +8,99 @@ import { useState } from 'react'
 
 const featuredProducts = [
   {
-    id: 'frieren',
-    name: 'Frieren',
-    category: 'Anime',
-    description: 'A maga imortal em sua forma mais elegante e misteriosa.',
-    images: [
-      '/frieren/Frieren_01.png',
-      '/frieren/Frieren_02.png',
-      '/frieren/Frieren_03.png',
-      '/frieren/Frieren_04.png'
-    ],
-    tags: ['Anime', 'Fantasia', 'Magia'],
-    featured: true
-  },
-  {
-    id: 'mercy',
-    name: 'Mercy',
+    id: '2B',
+    name: '2B',
     category: 'Gaming',
-    description: 'A anjo da guarda de Overwatch em detalhes realistas impressionantes.',
+    description: 'A androide de combate de Nier: Automata, em sua pose icônica.',
     images: [
-      '/mercy/mercy_01.png',
-      '/mercy/mercy_02.png',
-      '/mercy/mercy_03.png',
-      '/mercy/mercy_04.png',
-      '/mercy/mercy_05.png',
-      '/mercy/mercy_06.png'
+      '/fotos/2B/0.jpg',
+      '/fotos/2B/1.jpg',
+      '/fotos/2B/2.jpg',
+      '/fotos/2B/4.jpg',
+      '/fotos/2B/5.jpg',
+      '/fotos/2B/6.jpg'
     ],
-    tags: ['Gaming', 'FPS', 'Heroico'],
+    tags: ['Gaming', 'Action RPG', 'Sci-Fi'],
     featured: true
   },
   {
-    id: 'roxy-migurdia',
-    name: 'Roxy Migurdia',
+    id: 'Alice',
+    name: 'Alice',
     category: 'Anime',
-    description: 'A professora de magia com sua personalidade única e carismática.',
+    description: 'A sonhadora exploradora de Wonderland, pronta para novas aventuras.',
     images: [
-      '/roxy-migurdia/roxy_migurdia_01.png',
-      '/roxy-migurdia/roxy_migurdia_02.png',
-      '/roxy-migurdia/roxy_migurdia_03.png',
-      '/roxy-migurdia/roxy_migurdia_04.png',
-      '/roxy-migurdia/roxy_migurdia_05.png'
+      '/fotos/Alice/0.jpg',
+      '/fotos/Alice/1.jpg',
+      '/fotos/Alice/2.jpg',
+      '/fotos/Alice/3.jpg',
+      '/fotos/Alice/4.jpg',
+      '/fotos/Alice/5.jpg',
+      '/fotos/Alice/6.jpg',
+      '/fotos/Alice/7.jpg'
     ],
-    tags: ['Anime', 'Fantasia', 'Magia'],
+    tags: ['Anime', 'Fantasia', 'VRMMORPG'],
     featured: true
   },
   {
-    id: 'going-merry',
-    name: 'Going Merry',
+    id: 'Hornet',
+    name: 'Hornet',
+    category: 'Gaming',
+    description: 'A princesa protetora de Hallownest, do jogo Hollow Knight.',
+    images: [
+      '/fotos/Hornet/0.jpg',
+      '/fotos/Hornet/1.jpg',
+      '/fotos/Hornet/2.jpg',
+      '/fotos/Hornet/3.jpg',
+      '/fotos/Hornet/4.jpg',
+      '/fotos/Hornet/5.jpg',
+      '/fotos/Hornet/6.jpg'
+    ],
+    tags: ['Gaming', 'Metroidvania', 'Indie'],
+    featured: true
+  },
+  {
+    id: 'Momo',
+    name: 'Momo',
     category: 'Anime',
-    description: 'O navio mais querido de One Piece em formato chibi adorável.',
+    description: 'A médium destemida de Dandadan, enfrentando ameaças paranormais.',
     images: [
-      '/going-merry/going_merry_01.png',
-      '/going-merry/going_merry_02.png',
-      '/going-merry/going_merry_03.png',
-      '/going-merry/going_merry_04.png'
+      '/fotos/Momo/0.jpg',
+      '/fotos/Momo/1.jpg',
+      '/fotos/Momo/2.jpg',
+      '/fotos/Momo/3.jpg'
     ],
-    tags: ['Anime', 'Aventura', 'Chibi'],
+    tags: ['Anime', 'Super-Herói', 'Shonen'],
     featured: true
   },
   {
-    id: 'this-is-fine',
-    name: 'This is Fine',
-    category: 'Meme',
-    description: 'O meme clássico do cachorro em situação de caos, perfeitamente capturado.',
+    id: 'Roxy',
+    name: 'Roxy',
+    category: 'Anime',
+    description: 'A maga sem-teto de Mushoku Tensei, em sua jornada.',
     images: [
-      '/this-is-fine/this_is_fine_01.png',
-      '/this-is-fine/this_is_fine_02.png',
-      '/this-is-fine/this_is_fine_03.png',
-      '/this-is-fine/this_is_fine_04.png'
+      '/fotos/Roxy/0.jpg',
+      '/fotos/Roxy/1.jpg',
+      '/fotos/Roxy/2.jpg',
+      '/fotos/Roxy/3.jpg',
+      '/fotos/Roxy/4.jpg',
+      '/fotos/Roxy/5.jpg',
+      '/fotos/Roxy/6.jpg'
     ],
-    tags: ['Meme', 'Humor', 'Internet'],
+    tags: ['Anime', 'Isekai', 'Fantasia'],
+    featured: true
+  },
+  {
+    id: 'Velma',
+    name: 'Velma',
+    category: 'Desenho',
+    description: 'A detetive inteligente de Scooby-Doo, pronta para resolver mistérios.',
+    images: [
+      '/fotos/Velma/0.jpg',
+      '/fotos/Velma/1.jpg',
+      '/fotos/Velma/2.jpg',
+      '/fotos/Velma/3.jpg'
+    ],
+    tags: ['Desenho', 'Mistério', 'Clássico'],
     featured: true
   }
 ]
