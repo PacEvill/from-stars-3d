@@ -29,6 +29,7 @@ export default function CadastroPage() {
     }
 
     try {
+      console.log('[CADASTRO FRONT] Enviando dados para API...')
       const response = await fetch('/api/usuarios', {
         method: 'POST',
         headers: {
@@ -37,16 +38,22 @@ export default function CadastroPage() {
         body: JSON.stringify({ nome: name, email, senha: password }),
       })
 
+      console.log('[CADASTRO FRONT] Response status:', response.status)
+      const data = await response.json()
+      console.log('[CADASTRO FRONT] Response data:', data)
+
       if (response.ok) {
-        alert('Cadastro realizado com sucesso!')
+        console.log('[CADASTRO FRONT] Cadastro realizado com sucesso!')
+        alert('Cadastro realizado com sucesso! Você será redirecionado para fazer login.')
         router.push('/login') // Redireciona para a página de login após o cadastro
       } else {
-        const errorData = await response.json()
-        setError(errorData.message || 'Erro ao cadastrar usuário.')
+        const errorMessage = data.message || 'Erro ao cadastrar usuário.'
+        console.error('[CADASTRO FRONT] Erro:', errorMessage)
+        setError(errorMessage)
       }
     } catch (err) {
-      console.error('Erro na requisição:', err)
-      setError('Ocorreu um erro ao tentar cadastrar o usuário. Tente novamente.')
+      console.error('[CADASTRO FRONT] Erro na requisição:', err)
+      setError('Ocorreu um erro ao tentar cadastrar o usuário. Verifique sua conexão e tente novamente.')
     } finally {
       setLoading(false) // Desativa o estado de loading
     }
