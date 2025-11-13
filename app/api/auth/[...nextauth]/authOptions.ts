@@ -73,43 +73,25 @@ export const authOptions: AuthOptions = {
   // Garantir que NEXTAUTH_URL esteja correto em produção (definir na plataforma de deploy)
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async jwt({ token, user, account }) {
-      // Persistir id, isAdmin e imagem do usuário no token JWT.
-      // Isso permite que a sessão (session callback) reflita mudanças como atualização da foto de perfil.
+    async jwt({ token, user }) {
+      // Minimizar tamanho do cookie JWT: NÃO armazenar imagem base64 (evita erro 431: headers too large).
       if (user) {
         token.id = (user as any).id
-        // Se o objeto user (primeiro login) já tiver imagem vinda do authorize, manter.
-        if ((user as any).image) {
-          token.image = (user as any).image
-        }
-
-        // Carregar flags/atributos adicionais do banco (isAdmin + imagem mais recente)
+        // Buscar apenas flag isAdmin, ignorar imagem pesada
         try {
-          const dbUser = await prisma.usuario.findUnique({
-            where: { email: user.email! }
-          })
-          if (dbUser) {
-            token.isAdmin = (dbUser as any).isAdmin ?? false
-            // Sempre sincronizar imagem do banco (pode ter sido atualizada em outra aba/request)
-            if (dbUser.imagem) {
-              token.image = dbUser.imagem
-            }
-          }
+          const dbUser = await prisma.usuario.findUnique({ where: { email: user.email! } })
+          token.isAdmin = (dbUser as any)?.isAdmin ?? false
         } catch (error) {
-          console.error('[AUTH] Erro ao buscar dados do usuário (isAdmin/imagem):', error)
-          // Fallback: manter valores já presentes
-          token.isAdmin = (token as any).isAdmin ?? false
+          console.error('[AUTH] Erro ao buscar isAdmin:', error)
+          token.isAdmin = false
         }
       } else if (token.email) {
-        // Requisições subsequentes (sem objeto user). Revalidar sempre para refletir alterações recentes (ex: upload de avatar).
+        // Revalida somente isAdmin em ciclos subsequentes se necessário
         try {
           const dbUser = await prisma.usuario.findUnique({ where: { email: token.email as string } })
-          if (dbUser) {
-            token.isAdmin = (dbUser as any).isAdmin ?? (token as any).isAdmin ?? false
-            if (dbUser.imagem) token.image = dbUser.imagem
-          }
+          if (dbUser) token.isAdmin = (dbUser as any).isAdmin ?? (token as any).isAdmin ?? false
         } catch (error) {
-          console.error('[AUTH] Erro ao revalidar dados do usuário (ciclo subsequente):', error)
+          console.error('[AUTH] Erro ao revalidar isAdmin:', error)
         }
       }
       return token
@@ -118,9 +100,12 @@ export const authOptions: AuthOptions = {
       if (session.user) {
         session.user.id = String(token.id)
         session.user.isAdmin = Boolean((token as any).isAdmin)
-        // Propagar imagem se existir no token
-        if ((token as any).image) {
-          session.user.image = (token as any).image as string
+        // Buscar imagem sob demanda do banco (não inflar JWT). Evita header gigante.
+        try {
+          const dbUser = await prisma.usuario.findUnique({ where: { email: session.user.email! } })
+          if (dbUser?.imagem) session.user.image = dbUser.imagem
+        } catch (error) {
+          console.error('[AUTH] Erro ao carregar imagem na session:', error)
         }
       }
       return session
