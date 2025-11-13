@@ -3,6 +3,11 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions'
 import prisma from '@/lib/prisma'
 
+// Força execução dinâmica (evita tentativa de pré-renderização estática)
+export const dynamic = 'force-dynamic'
+export const fetchCache = 'force-no-store'
+export const revalidate = 0
+
 // GET - Listar todos os orçamentos (admin only)
 export async function GET(request: Request) {
   try {

@@ -3,6 +3,11 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions'
 import prisma from '@/lib/prisma'
 
+// Força execução dinâmica nesta rota parametrizada
+export const dynamic = 'force-dynamic'
+export const fetchCache = 'force-no-store'
+export const revalidate = 0
+
 // PATCH - Atualizar status ou valor do orçamento
 export async function PATCH(
   request: Request,
