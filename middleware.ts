@@ -8,21 +8,30 @@ export async function middleware(req: NextRequest) {
 
   if (!isAdminRoute) return NextResponse.next()
 
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+  try {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
 
-  // Não autenticado
-  if (!token) {
+    // Não autenticado
+    if (!token) {
+      console.log('[MIDDLEWARE] Token ausente, redirecionando para /login')
+      const loginUrl = new URL('/login', req.url)
+      return NextResponse.redirect(loginUrl)
+    }
+
+    // Sem permissão
+    if (!(token as any).isAdmin) {
+      console.log('[MIDDLEWARE] Usuário não admin, redirecionando para /')
+      const homeUrl = new URL('/', req.url)
+      return NextResponse.redirect(homeUrl)
+    }
+
+    return NextResponse.next()
+  } catch (error) {
+    console.error('[MIDDLEWARE] Erro ao processar token JWT:', error)
+    // Se falhar ao ler token, assume não autenticado
     const loginUrl = new URL('/login', req.url)
     return NextResponse.redirect(loginUrl)
   }
-
-  // Sem permissão
-  if (!(token as any).isAdmin) {
-    const homeUrl = new URL('/', req.url)
-    return NextResponse.redirect(homeUrl)
-  }
-
-  return NextResponse.next()
 }
 
 export const config = {
