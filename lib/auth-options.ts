@@ -6,13 +6,7 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import prisma from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { createTransport } from 'nodemailer';
-
-type UserToken = {
-  id?: string;
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-};
+import type { JWT } from 'next-auth/jwt';
 
 const prismaAdapterCompat = PrismaAdapter as unknown as (client: unknown, modelMapping?: unknown) => unknown;
 
@@ -141,30 +135,27 @@ export const authOptions: NextAuthOptions = {
       }
       return true;
     },
-    async jwt({ token, user, trigger, session }) {
-      const jwtToken = token as UserToken;
-
+    async jwt({ token, user, trigger, session }): Promise<JWT> {
       if (user) {
-        jwtToken.id = user.id;
-        jwtToken.name = user.name;
-        jwtToken.email = user.email;
-        jwtToken.image = user.image;
+        token.id = user.id;
+        token.name = user.name ?? null;
+        token.email = user.email ?? null;
+        token.picture = user.image ?? null;
       }
 
       if (trigger === 'update' && session?.user?.image) {
-        jwtToken.image = session.user.image;
+        token.picture = session.user.image;
       }
 
-      return jwtToken;
+      return token;
     },
     async session({ session, token }) {
-      const jwtToken = token as UserToken;
       session.user = {
         ...session.user,
-        id: jwtToken.id,
-        name: jwtToken.name,
-        email: jwtToken.email,
-        image: jwtToken.image,
+        id: token.id,
+        name: token.name ?? null,
+        email: token.email ?? null,
+        image: token.picture ?? null,
       };
       return session;
     },
