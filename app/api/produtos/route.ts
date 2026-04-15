@@ -5,7 +5,6 @@ export async function GET(request: Request) {
   if (!process.env.DATABASE_URL) {
     return NextResponse.json([], { status: 200 })
   }
-
   try {
     const produtos = await prisma.produto.findMany({
       include: {

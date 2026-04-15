@@ -37,7 +37,6 @@ const ImageModal = ({
 
 
 
-
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (!isOpen) return
     

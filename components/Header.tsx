@@ -67,13 +67,31 @@ const Header = () => {
     }
 
     if (status === "authenticated") {
+      const isAdmin = (session?.user as any)?.isAdmin
+      
       return (
         <div className="flex items-center space-x-4">
+          {isAdmin && (
+            <Link href="/admin" className="flex items-center text-purple-400 hover:text-purple-300 transition-colors duration-300 font-semibold">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+              Admin
+            </Link>
+          )}
           <Link href="/perfil" className="flex items-center text-secondary hover:text-accent transition-colors duration-300">
             <User size={20} className="mr-1" />
             Perfil
           </Link>
-          <button onClick={() => signOut()} className="flex items-center text-secondary hover:text-accent transition-colors duration-300">
+          <button onClick={() => {
+            const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : '/')
+            // Se estiver em localhost, redireciona para '/', em produção usar baseUrl raiz
+            const callbackUrl = baseUrl.includes('localhost') ? '/' : baseUrl
+            signOut({ callbackUrl })
+          }} className="flex items-center text-secondary hover:text-accent transition-colors duration-300">
             <LogOut size={20} className="mr-1" />
             Sair
           </button>
@@ -112,7 +130,12 @@ const Header = () => {
                 <User size={20} className="mr-2" />
                 Perfil
             </Link>
-            <button onClick={() => { signOut(); setIsMenuOpen(false); }} className="flex items-center w-full text-left text-secondary hover:text-accent transition-colors duration-300 font-medium py-2">
+            <button onClick={() => { 
+              const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : '/')
+              const callbackUrl = baseUrl.includes('localhost') ? '/' : baseUrl
+              signOut({ callbackUrl }); 
+              setIsMenuOpen(false); 
+            }} className="flex items-center w-full text-left text-secondary hover:text-accent transition-colors duration-300 font-medium py-2">
                 <LogOut size={20} className="mr-2" />
                 Sair
             </button>

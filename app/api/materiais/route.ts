@@ -1,21 +1,13 @@
 import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 
-
-
 export async function GET() {
-  if (!process.env.DATABASE_URL) {
-    return NextResponse.json([], { status: 200 });
-  }
-
   try {
     const materiais = await prisma.material.findMany();
     return NextResponse.json(materiais, { status: 200 });
   } catch (error) {
     console.error('Erro ao buscar materiais:', error);
     return NextResponse.json({ message: 'Erro interno do servidor ao buscar materiais.' }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
 }
 
@@ -42,7 +34,5 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Erro ao criar material:', error);
     return NextResponse.json({ message: 'Erro interno do servidor ao criar material.' }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
 }

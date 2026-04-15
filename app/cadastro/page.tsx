@@ -1,7 +1,7 @@
 'use client'
-import Link from 'next/link'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation' // Importar useRouter
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function CadastroPage() {
   const [name, setName] = useState('')
@@ -9,13 +9,13 @@ export default function CadastroPage() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false) // Novo estado para loading
-  const router = useRouter() // Inicializar useRouter
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setError('') // Limpa erros anteriores
-    setLoading(true) // Ativa o estado de loading
+    setError('')
+    setLoading(true)
 
     if (!name || !email || !password || !confirmPassword) {
       setError('Por favor, preencha todos os campos.')
@@ -39,7 +39,7 @@ export default function CadastroPage() {
 
       if (response.ok) {
         alert('Cadastro realizado com sucesso!')
-        router.push('/login') // Redireciona para a página de login após o cadastro
+        router.push('/login')
       } else {
         const errorData = await response.json()
         setError(errorData.message || 'Erro ao cadastrar usuário.')
@@ -48,7 +48,7 @@ export default function CadastroPage() {
       console.error('Erro na requisição:', err)
       setError('Ocorreu um erro ao tentar cadastrar o usuário. Tente novamente.')
     } finally {
-      setLoading(false) // Desativa o estado de loading
+      setLoading(false)
     }
   }
 
@@ -65,7 +65,7 @@ export default function CadastroPage() {
               className="input-field"
               value={name}
               onChange={e => setName(e.target.value)}
-              disabled={loading} // Desabilita enquanto carrega
+              disabled={loading}
             />
           </div>
           <div>
@@ -76,7 +76,7 @@ export default function CadastroPage() {
               className="input-field"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              disabled={loading} // Desabilita enquanto carrega
+              disabled={loading}
             />
           </div>
           <div>
@@ -87,7 +87,7 @@ export default function CadastroPage() {
               className="input-field"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              disabled={loading} // Desabilita enquanto carrega
+              disabled={loading}
             />
           </div>
           <div>
@@ -98,12 +98,12 @@ export default function CadastroPage() {
               className="input-field"
               value={confirmPassword}
               onChange={e => setConfirmPassword(e.target.value)}
-              disabled={loading} // Desabilita enquanto carrega
+              disabled={loading}
             />
           </div>
           {error && <p className="text-red-500 text-sm -mt-2 mb-2 min-h-[1.2rem]">{error}</p>}
           <button type="submit" className="btn-primary w-full" disabled={loading}>
-            {loading ? 'Cadastrando...' : 'Criar Conta'}
+            {loading ? 'Cadastrando...' : 'Cadastrar'}
           </button>
         </form>
         <div className="mt-4 text-center text-secondary">

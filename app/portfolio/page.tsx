@@ -45,8 +45,6 @@ const PortfolioPage = () => {
               alt={project.name}
               width={500}
               height={300}
-              layout="responsive"
-              objectFit="cover"
               className="w-full h-48 object-cover"
             />
             <div className="p-6">

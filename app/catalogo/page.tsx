@@ -32,8 +32,75 @@ export default function CatalogoPage() {
   const [filterTamanho, setFilterTamanho] = useState('Todos')
   const [filterDisponibilidade, setFilterDisponibilidade] = useState('Todos')
   const [filteredModelos, setFilteredModelos] = useState<Produto[]>([])
+  const [pageOrigin, setPageOrigin] = useState('')
 
-  // Fetch dos produtos da API
+  const catalogImages: Record<string, string[]> = {
+    'Ahri 1': [
+      '/catalogo/Ahri 1/0.jpg',
+      '/catalogo/Ahri 1/1.jpg',
+    ],
+    'Ahri 2': [
+      '/catalogo/Ahri 2/0.png',
+      '/catalogo/Ahri 2/2.jpg',
+      '/catalogo/Ahri 2/3.jpg',
+      '/catalogo/Ahri 2/4.jpg',
+    ],
+    'Ahri SB': [
+      '/catalogo/Ahri SB/0.jpg',
+      '/catalogo/Ahri SB/1.jpg',
+      '/catalogo/Ahri SB/2.jpg',
+      '/catalogo/Ahri SB/3.jpg',
+    ],
+    'Batman': [
+      '/catalogo/Batman/0.jpg',
+      '/catalogo/Batman/1.png',
+    ],
+    'Booette': [
+      '/catalogo/Booette/0.jpg',
+      '/catalogo/Booette/1.jpg',
+      '/catalogo/Booette/2.jpg',
+      '/catalogo/Booette/3.jpg',
+    ],
+    'Bowsette': [
+      '/catalogo/Bowsette/0.jpg',
+      '/catalogo/Bowsette/1.jpg',
+      '/catalogo/Bowsette/2.jpg',
+    ],
+    'Furina': [
+      '/catalogo/Furina/0.jpg',
+      '/catalogo/Furina/1.jpg',
+      '/catalogo/Furina/2.jpg',
+    ],
+    'Gwen': [
+      '/catalogo/Gwen/0.jpg',
+      '/catalogo/Gwen/1.jpg',
+      '/catalogo/Gwen/2.jpg',
+    ],
+    'Levi': [
+      '/catalogo/Levi/1.png',
+      '/catalogo/Levi/2.png',
+    ],
+    'Maomao': [
+      '/catalogo/Maomao/0.jpg',
+      '/catalogo/Maomao/1.jpg',
+      '/catalogo/Maomao/2.jpg',
+    ],
+    'Maomao e Jinshi': [
+      '/catalogo/Maomao e Jinshi/0.jpg',
+      '/catalogo/Maomao e Jinshi/1.jpg',
+      '/catalogo/Maomao e Jinshi/2.jpg',
+    ],
+    'Mikasa': [
+      '/catalogo/Mikasa/0.jpg',
+      '/catalogo/Mikasa/1.jpg',
+    ],
+    'Sett': [
+      '/catalogo/Sett/0.jpg',
+      '/catalogo/Sett/1.jpg',
+      '/catalogo/Sett/2.jpg',
+    ],
+  }
+
   useEffect(() => {
     const fetchProdutos = async () => {
       try {
@@ -48,6 +115,12 @@ export default function CatalogoPage() {
       }
     }
     fetchProdutos()
+  }, [])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setPageOrigin(window.location.origin)
+    }
   }, [])
 
   // Lógica de filtragem
@@ -83,6 +156,15 @@ export default function CatalogoPage() {
 
   if (loading) {
     return <div className="min-h-screen bg-primary py-16 px-4 text-center text-white">Carregando produtos...</div>
+  }
+
+  const createWhatsappLink = (produtoId: number) => {
+    const baseUrl = 'https://wa.me/5521986333478'
+    const itemUrl = pageOrigin
+      ? `${pageOrigin}/produto/${produtoId}`
+      : `/produto/${produtoId}`
+    const mensagem = `ola gostaria de fazer um orçamento desta peça ${itemUrl}`
+    return `${baseUrl}?text=${encodeURIComponent(mensagem)}`
   }
 
   return (

@@ -82,8 +82,8 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
           </div>
         </div>
 
-        {/* Galeria de Imagens (se houver) */}
-        
+        {/* Galeria de Imagens (se houver) */
+        }
       </div>
     </main>
   )

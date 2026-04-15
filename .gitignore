@@ -50,6 +50,7 @@ jspm_packages/
 # Output of 'npm pack'
 *.tgz
 
+
 # dotenv environment variables file
 .env
 .env.*
@@ -85,15 +86,37 @@ secrets/
 *.sublime-project
 *.sublime-workspace
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+# Package manager files
+package-lock.json
+
+=======
+>>>>>>> 12efde8 (feat: add preflight script for environment validation and database connection)
+>>>>>>> f8eb54e (feat: add preflight script for environment validation and database connection)
 # Thumbnails
 .thumbnails/
 
 # Prisma generated files
 /app/generated/prisma
 
+<<<<<<< HEAD
 # User-generated uploads (can contain private assets)
 public/uploads/
 
+=======
+<<<<<<< HEAD
+# TypeScript build info
+tsconfig.tsbuildinfo
+
+# Temporary files
+cartão*de*visita*.pdf
+=======
+# User-generated uploads (can contain private assets)
+public/uploads/
+
+>>>>>>> f8eb54e (feat: add preflight script for environment validation and database connection)
 # Test logs
 test-logs/
 
@@ -102,3 +125,7 @@ ROTEIRO_DEPLOY_VERCEL.txt
 
 # Análise de auditoria e recomendações
 ANALISE_AUDITORIA_E_RECOMENDACOES.txt
+<<<<<<< HEAD
+=======
+>>>>>>> 12efde8 (feat: add preflight script for environment validation and database connection)
+>>>>>>> f8eb54e (feat: add preflight script for environment validation and database connection)

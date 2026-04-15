@@ -1,8 +1,8 @@
 'use client'
 import Link from 'next/link'
 import { useState } from 'react'
-import { signIn } from 'next-auth/react' // Importar signIn
-import { useRouter } from 'next/navigation' // Importar useRouter
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -24,16 +24,15 @@ export default function LoginPage() {
 
     try {
       const result = await signIn('credentials', {
-        redirect: false, // Não redireciona automaticamente
+        redirect: false,
         email,
-        senha: password, // O nome do campo deve corresponder ao que você definiu em credentials no NextAuth config
+        senha: password,
       })
 
       if (result?.error) {
         setError(result.error === 'CredentialsSignin' ? 'Email ou senha inválidos.' : result.error)
       } else {
-        // Login bem-sucedido
-        router.push('/') // Redireciona para a página de home
+        router.push('/')
       }
     } catch (err) {
       console.error('Erro na requisição de login:', err)
@@ -75,18 +74,6 @@ export default function LoginPage() {
             {loading ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
-        <div className="mt-6 text-center">
-          <button
-            onClick={() => signIn('google', { callbackUrl: '/' })}
-            className="btn-secondary w-full flex items-center justify-center space-x-2"
-            disabled={loading}
-          >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12.24 10.285V14.4h6.806c-.275 1.767-2.088 5.97-6.806 5.97-4.163 0-7.542-3.317-7.542-7.48S8.077 2.525 12.24 2.525c2.448 0 3.986 1.008 4.909 1.891l3.562-3.562C18.95 1.19 16.272 0 12.24 0 5.463 0 0 5.336 0 12c0 6.284 5.04 11.36 12.24 11.36 7.152 0 11.875-5.07 11.875-11.025 0-.805-.13-1.39-.284-1.985H12.24z"/>
-            </svg>
-            <span>Entrar com Google</span>
-          </button>
-        </div>
         <div className="mt-4 text-center text-secondary">
           Não tem uma conta?{' '}
           <Link href="/cadastro" className="text-accent hover:underline">Crie uma</Link>
