@@ -121,7 +121,7 @@ export default function ProfilePage() {
 
                 <div className="mt-8 pt-8 border-t border-gray-700">
                   <h2 className="text-2xl font-bold mb-6 text-white">Verificação de E-mail</h2>
-                  {session.user.emailVerified ? (
+                  {(session.user as any).emailVerified ? (
                     <p className="text-green-400">Seu e-mail foi verificado com sucesso.</p>
                   ) : (
                     <div>
