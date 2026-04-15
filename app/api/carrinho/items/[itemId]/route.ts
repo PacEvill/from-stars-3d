@@ -29,6 +29,7 @@ export async function PUT(request: Request, { params }: { params: { itemId: stri
 }
 
 // DELETE: Remove um item do carrinho
+export async function DELETE(request: Request, { params }: { params: { itemId: string } }) {
   const session = await getServerSession(authOptions)
   if (!session) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
   const itemId = Number(params.itemId)
