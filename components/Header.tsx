@@ -28,12 +28,10 @@ const Header = () => {
   const NAV_ITEMS: NavItem[] = [
     { name: 'Home', href: '/' },
     { name: 'Catálogo', href: '/catalogo' },
-    { name: 'Serviços', href: '/servicos' },
-    { name: 'Portfólio', href: '/portfolio' },
-    { name: 'Materiais', href: '/guia-materiais' },
     { name: 'Orçamento', href: '/orcamento' },
     { name: 'Sobre', href: '/sobre' },
-
+    { name: 'Contato', href: '/contato' },
+    { name: 'Nossos Cursos', href: '/nossos-cursos' },
   ]
 
   const SOCIAL_LINKS = [

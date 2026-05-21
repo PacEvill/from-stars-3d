@@ -20,14 +20,14 @@ const Hero = () => {
         >
           <div className="space-y-6">
             <motion.h1 
-              className="text-5xl md:text-7xl font-heading font-bold leading-tight"
+              className="text-5xl md:text-7xl font-heading font-bold leading-tight uppercase"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <span className="text-secondary">Arte feita por uma</span>
+              <span className="text-secondary">Transformando suas</span>
               <br />
-              <span className="text-gradient">fã, para fãs</span>
+              <span className="text-gradient">ideias em realidade</span>
             </motion.h1>
             
             <motion.p 
