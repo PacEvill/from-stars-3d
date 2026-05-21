@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import path from 'path';
 import fs from 'fs/promises'; // Usar fs/promises para async/await
 import { randomUUID } from 'crypto';
+import storage from '@/lib/storage';
 
 export async function GET() {
   try {
@@ -35,18 +36,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Todos os campos obrigatórios (exceto arquivo) são necessários para criar um orçamento.' }, { status: 400 });
     }
 
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-    await fs.mkdir(uploadDir, { recursive: true });
     let arquivoUrl: string | undefined;
 
     const arquivo = formData.get('arquivo');
     if (arquivo instanceof File && arquivo.size > 0) {
       const safeExt = path.extname(arquivo.name || '').slice(0, 10);
       const fileName = `${Date.now()}-${randomUUID()}${safeExt}`;
-      const filePath = path.join(uploadDir, fileName);
       const buffer = Buffer.from(await arquivo.arrayBuffer());
-      await fs.writeFile(filePath, buffer);
-      arquivoUrl = `/uploads/${fileName}`;
+      arquivoUrl = await storage.saveFile(buffer, fileName);
     }
 
     const novoOrcamento = await prisma.orcamento.create({
