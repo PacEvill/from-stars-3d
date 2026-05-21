@@ -190,24 +190,9 @@ const Header = () => {
             </nav>
           </div>
 
-          {/* Login/Cadastro, Carrinho e Social Links */}
+          {/* Login/Cadastro */}
           <div className="hidden md:flex items-center space-x-4">
             <AuthLinks />
-            <div className="border-l border-gray-600 h-6 mx-2"></div>
-            <CartIcon />
-            <div className="border-l border-gray-600 h-6 mx-2"></div>
-            {SOCIAL_LINKS.map((social) => (
-              <Link
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-secondary hover:text-accent transition-colors duration-300"
-                aria-label={social.label}
-              >
-                {social.icon}
-              </Link>
-            ))}
           </div>
 
           {/* Mobile Menu Button */}
@@ -234,10 +219,6 @@ const Header = () => {
               <div className="mb-4">
                 <MobileAuthLinks />
               </div>
-              <button onClick={() => { openCart(); setIsMenuOpen(false); }} className="flex items-center text-secondary hover:text-accent transition-colors duration-300 font-medium py-2">
-                  <ShoppingCart size={20} className="mr-2" />
-                  Carrinho ({itemCount})
-              </button>
               <div className="border-t border-gray-700"></div>
               {NAV_ITEMS.map((item) => (
                 <Link
@@ -249,22 +230,6 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
-              
-              {/* Mobile Social Links */}
-              <div className="flex items-center space-x-4 pt-4 border-t border-gray-600">
-                {SOCIAL_LINKS.map((social) => (
-                  <Link
-                    key={social.label}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-secondary hover:text-accent transition-colors duration-300"
-                    aria-label={social.label}
-                  >
-                    {social.icon}
-                  </Link>
-                ))}
-              </div>
             </div>
           </motion.div>
         )}

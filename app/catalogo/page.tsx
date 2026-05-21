@@ -182,30 +182,32 @@ export default function CatalogoPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {filteredModelos.length > 0 ? (
             filteredModelos.map(modelo => (
-              <div key={modelo.id} className="card flex flex-col bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105">
-                <Link href={`/produto/${modelo.id}`} className="block">
-                  <div className="w-full h-56 relative bg-gray-900">
+              <div key={modelo.id} className="group flex flex-col bg-gray-800/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg border border-gray-700 hover:border-accent/50 transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.2)]">
+                <Link href={`/produto/${modelo.id}`} className="block relative">
+                  <div className="w-full h-64 relative bg-gray-900 overflow-hidden">
                     <Image 
                       src={modelo.imagem || '/default-avatar.svg'}
                       alt={modelo.nome}
                       layout="fill"
                       objectFit="cover"
+                      className="group-hover:scale-110 transition-transform duration-700"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-60"></div>
                   </div>
-                  <div className="p-4">
-                    <h2 className="text-xl font-heading font-semibold text-accent mb-2 truncate">{modelo.nome}</h2>
-                    <p className="text-secondary text-sm mb-4 h-10 overflow-hidden">{modelo.descricao}</p>
-                    <p className="text-lg font-bold text-white mb-4">R$ {modelo.preco.toFixed(2)}</p>
+                  <div className="p-5">
+                    <h2 className="text-xl font-heading font-bold text-white mb-2 truncate group-hover:text-accent transition-colors duration-300">{modelo.nome}</h2>
+                    <p className="text-gray-400 text-sm mb-4 h-10 overflow-hidden line-clamp-2">{modelo.descricao}</p>
+                    <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-accent to-purple-400 mb-4">R$ {modelo.preco.toFixed(2)}</p>
                   </div>
                 </Link>
-                <div className="mt-auto p-4 pt-0">
+                <div className="mt-auto p-5 pt-0">
                   <button 
                     onClick={() => addToCart(modelo.id, 1)}
-                    className="btn-primary w-full flex items-center justify-center"
+                    className="w-full flex items-center justify-center px-6 py-3 font-bold text-white bg-gradient-to-r from-accent to-purple-600 rounded-xl hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={modelo.disponibilidade === 'Esgotado'}
                   >
-                    <ShoppingCart size={18} className="mr-2" />
-                    {modelo.disponibilidade === 'Esgotado' ? 'Esgotado' : 'Adicionar ao Carrinho'}
+                    <ShoppingCart size={20} className="mr-2" />
+                    {modelo.disponibilidade === 'Esgotado' ? 'Esgotado' : 'Adicionar'}
                   </button>
                 </div>
               </div>
