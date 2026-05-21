@@ -122,99 +122,157 @@ export default function CatalogoPage() {
 
   return (
     <main className="min-h-screen bg-primary py-16 px-4">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl md:text-4xl font-heading font-bold text-secondary mb-10 text-center">Catálogo de Modelos 3D</h1>
-        <p className="text-secondary text-lg text-center mb-8 max-w-2xl mx-auto">Explore alguns dos modelos 3D criados com dedicação e criatividade. Cada modelo é único, pensado para colecionadores e apaixonados por arte digital e impressões 3D.</p>
-
-        {/* Filtros */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-          <input
-            type="text"
-            placeholder="Buscar por nome..."
-            className="col-span-2 md:col-span-1 p-3 rounded-lg bg-gray-900 text-secondary placeholder-gray-500 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <select 
-            className="p-3 rounded-lg bg-gray-900 text-secondary border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
-            value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value)}
-          >
-            <option value="Todos">Todas as Categorias</option>
-            <option value="Figures">Figures</option>
-            <option value="Decorativos">Decorativos</option>
-            <option value="Porta-cartões">Porta-cartões</option>
-            <option value="Brinquedos">Brinquedos</option>
-            <option value="Fidgets">Fidgets</option>
-            <option value="Funko pop">Funko pop</option>
-            <option value="Carros">Carros</option>
-            <option value="Chaveiros">Chaveiros</option>
-            <option value="Letreiros">Letreiros</option>
-            <option value="Suportes">Suportes</option>
-            <option value="RPG">RPG</option>
-          </select>
-          <input
-            type="number"
-            placeholder="Preço Min (R$)"
-            className="p-3 rounded-lg bg-gray-900 text-secondary placeholder-gray-500 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
-            value={filterPrecoMin}
-            onChange={(e) => setFilterPrecoMin(e.target.value)}
-          />
-          <input
-            type="number"
-            placeholder="Preço Max (R$)"
-            className="p-3 rounded-lg bg-gray-900 text-secondary placeholder-gray-500 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
-            value={filterPrecoMax}
-            onChange={(e) => setFilterPrecoMax(e.target.value)}
-          />
-          <select 
-            className="p-3 rounded-lg bg-gray-900 text-secondary border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
-            value={filterDisponibilidade}
-            onChange={(e) => setFilterDisponibilidade(e.target.value)}
-          >
-            <option value="Todos">Disponibilidade</option>
-            <option value="Pronta-entrega">Pronta-entrega</option>
-            <option value="Sob encomenda">Sob encomenda</option>
-          </select>
-        </div>
-
-        {/* Grid de Produtos */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {filteredModelos.length > 0 ? (
-            filteredModelos.map(modelo => (
-              <div key={modelo.id} className="group flex flex-col bg-gray-800/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg border border-gray-700 hover:border-accent/50 transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.2)]">
-                <Link href={`/produto/${modelo.id}`} className="block relative">
-                  <div className="w-full h-64 relative bg-gray-900 overflow-hidden">
-                    <Image 
-                      src={modelo.imagem || '/default-avatar.svg'}
-                      alt={modelo.nome}
-                      layout="fill"
-                      objectFit="cover"
-                      className="group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-60"></div>
-                  </div>
-                  <div className="p-5">
-                    <h2 className="text-xl font-heading font-bold text-white mb-2 truncate group-hover:text-accent transition-colors duration-300">{modelo.nome}</h2>
-                    <p className="text-gray-400 text-sm mb-4 h-10 overflow-hidden line-clamp-2">{modelo.descricao}</p>
-                    <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-accent to-purple-400 mb-4">R$ {modelo.preco.toFixed(2)}</p>
-                  </div>
-                </Link>
-                <div className="mt-auto p-5 pt-0">
-                  <button 
-                    onClick={() => addToCart(modelo.id, 1)}
-                    className="w-full flex items-center justify-center px-6 py-3 font-bold text-white bg-gradient-to-r from-accent to-purple-600 rounded-xl hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                    disabled={modelo.disponibilidade === 'Esgotado'}
-                  >
-                    <ShoppingCart size={20} className="mr-2" />
-                    {modelo.disponibilidade === 'Esgotado' ? 'Esgotado' : 'Adicionar'}
-                  </button>
-                </div>
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-8">
+        
+        {/* Sidebar de Filtros */}
+        <aside className="w-full md:w-1/4 space-y-6">
+          <div className="bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-lg sticky top-24">
+            <h3 className="text-xl font-bold text-white mb-6 border-b border-gray-700 pb-2">Filtros</h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Buscar</label>
+                <input
+                  type="text"
+                  placeholder="Nome do produto..."
+                  className="w-full p-3 rounded-lg bg-gray-900 text-secondary placeholder-gray-500 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </div>
-            ))
-          ) : (
-            <p className="text-secondary text-center col-span-full">Nenhum modelo encontrado com os critérios de busca.</p>
-          )}
+
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Categoria</label>
+                <select 
+                  className="w-full p-3 rounded-lg bg-gray-900 text-secondary border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
+                  value={filterCategory}
+                  onChange={(e) => setFilterCategory(e.target.value)}
+                >
+                  <option value="Todos">Todas as Categorias</option>
+                  <option value="Figures">Figures</option>
+                  <option value="Decorativos">Decorativos</option>
+                  <option value="Porta-cartões">Porta-cartões</option>
+                  <option value="Brinquedos">Brinquedos</option>
+                  <option value="Fidgets">Fidgets</option>
+                  <option value="Funko pop">Funko pop</option>
+                  <option value="Carros">Carros</option>
+                  <option value="Chaveiros">Chaveiros</option>
+                  <option value="Letreiros">Letreiros</option>
+                  <option value="Suportes">Suportes</option>
+                  <option value="RPG">RPG</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Preço Mínimo (R$)</label>
+                <input
+                  type="number"
+                  placeholder="0.00"
+                  className="w-full p-3 rounded-lg bg-gray-900 text-secondary placeholder-gray-500 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
+                  value={filterPrecoMin}
+                  onChange={(e) => setFilterPrecoMin(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Preço Máximo (R$)</label>
+                <input
+                  type="number"
+                  placeholder="999.00"
+                  className="w-full p-3 rounded-lg bg-gray-900 text-secondary placeholder-gray-500 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
+                  value={filterPrecoMax}
+                  onChange={(e) => setFilterPrecoMax(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Disponibilidade</label>
+                <select 
+                  className="w-full p-3 rounded-lg bg-gray-900 text-secondary border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
+                  value={filterDisponibilidade}
+                  onChange={(e) => setFilterDisponibilidade(e.target.value)}
+                >
+                  <option value="Todos">Todas</option>
+                  <option value="Pronta-entrega">Pronta-entrega</option>
+                  <option value="Sob encomenda">Sob encomenda</option>
+                </select>
+              </div>
+
+              <button 
+                onClick={() => {
+                  setSearchTerm(''); setFilterCategory('Todos'); setFilterPrecoMin(''); setFilterPrecoMax(''); setFilterDisponibilidade('Todos');
+                }}
+                className="w-full mt-4 py-2 text-sm text-gray-400 hover:text-white transition-colors border border-gray-600 rounded-lg hover:bg-gray-700"
+              >
+                Limpar Filtros
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        {/* Área Principal: Produtos */}
+        <div className="w-full md:w-3/4">
+          
+          {/* Banner Oferta / Categorias Rápidas */}
+          <div className="mb-8 bg-gradient-to-r from-purple-900 to-indigo-900 rounded-2xl p-6 border border-purple-500/30 shadow-lg flex flex-col sm:flex-row items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-white mb-2">Desconto em Figures de RPG!</h2>
+              <p className="text-purple-200">Use o cupom <span className="font-mono bg-black/30 px-2 py-1 rounded text-accent">Mestre20</span> no seu orçamento via WhatsApp.</p>
+            </div>
+            <div className="mt-4 sm:mt-0 flex space-x-2">
+              <button onClick={() => setFilterCategory('RPG')} className="px-4 py-2 bg-purple-800 hover:bg-purple-700 rounded-full text-sm font-bold text-white transition-colors border border-purple-600">RPG</button>
+              <button onClick={() => setFilterCategory('Figures')} className="px-4 py-2 bg-indigo-800 hover:bg-indigo-700 rounded-full text-sm font-bold text-white transition-colors border border-indigo-600">Figures</button>
+            </div>
+          </div>
+
+          {/* Grid de Produtos */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredModelos.length > 0 ? (
+              filteredModelos.map(modelo => (
+                <div key={modelo.id} className="group flex flex-col bg-gray-800 rounded-2xl overflow-hidden shadow-lg border border-gray-700 hover:border-accent/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(168,85,247,0.2)] hover:-translate-y-1">
+                  <Link href={`/produto/${modelo.id}`} className="block relative">
+                    <div className="w-full h-56 relative bg-gray-900 overflow-hidden">
+                      <Image 
+                        src={modelo.imagem || '/default-avatar.svg'}
+                        alt={modelo.nome}
+                        layout="fill"
+                        objectFit="cover"
+                        className="group-hover:scale-110 transition-transform duration-700"
+                      />
+                      {modelo.disponibilidade === 'Pronta-entrega' && (
+                        <div className="absolute top-3 right-3 bg-green-500/90 text-white text-xs font-bold px-2 py-1 rounded backdrop-blur-sm">
+                          Pronta Entrega
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-5 pb-2">
+                      <h2 className="text-lg font-heading font-bold text-white mb-1 truncate group-hover:text-accent transition-colors">{modelo.nome}</h2>
+                      <p className="text-gray-400 text-sm mb-3 h-10 overflow-hidden">{modelo.descricao || 'Peça 3D de alta qualidade.'}</p>
+                      <div className="flex items-end justify-between mb-2">
+                        <p className="text-2xl font-bold text-accent">R$ {modelo.preco.toFixed(2)}</p>
+                      </div>
+                    </div>
+                  </Link>
+                  <div className="mt-auto p-5 pt-2">
+                    <button 
+                      onClick={() => addToCart(modelo.id, 1)}
+                      className="w-full flex items-center justify-center py-3 bg-gray-700 hover:bg-accent text-white font-bold rounded-xl transition-colors duration-300"
+                      disabled={modelo.disponibilidade === 'Esgotado'}
+                    >
+                      <ShoppingCart size={18} className="mr-2" />
+                      {modelo.disponibilidade === 'Esgotado' ? 'Esgotado' : 'Adicionar ao Carrinho'}
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="col-span-full flex flex-col items-center justify-center py-20 bg-gray-800/50 rounded-2xl border border-gray-700 border-dashed">
+                <span className="text-4xl mb-4">🔍</span>
+                <p className="text-gray-300 text-lg">Nenhum modelo encontrado com os filtros atuais.</p>
+                <button onClick={() => {setSearchTerm(''); setFilterCategory('Todos');}} className="mt-4 text-accent hover:underline">Limpar filtros e ver todos</button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </main>

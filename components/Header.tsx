@@ -157,16 +157,11 @@ const Header = () => {
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo e Navegação Principal */}
+          {/* Autenticação (Entrar/Cadastrar no lugar da Logo) e Navegação Principal */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2 mr-12">
-              <div className="w-8 h-8 bg-gradient-to-r from-accent to-accentAlt rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">3D</span>
-              </div>
-              <span className="text-xl font-heading font-bold text-gradient">
-                From Stars 3D
-              </span>
-            </Link>
+            <div className="mr-8">
+              <AuthLinks />
+            </div>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
@@ -190,9 +185,22 @@ const Header = () => {
             </nav>
           </div>
 
-          {/* Login/Cadastro */}
+          {/* Carrinho e Social Links */}
           <div className="hidden md:flex items-center space-x-4">
-            <AuthLinks />
+            <CartIcon />
+            <div className="border-l border-gray-600 h-6 mx-2"></div>
+            {SOCIAL_LINKS.map((social) => (
+              <Link
+                key={social.label}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-secondary hover:text-accent transition-colors duration-300"
+                aria-label={social.label}
+              >
+                {social.icon}
+              </Link>
+            ))}
           </div>
 
           {/* Mobile Menu Button */}
@@ -219,6 +227,10 @@ const Header = () => {
               <div className="mb-4">
                 <MobileAuthLinks />
               </div>
+              <button onClick={() => { openCart(); setIsMenuOpen(false); }} className="flex items-center text-secondary hover:text-accent transition-colors duration-300 font-medium py-2">
+                  <ShoppingCart size={20} className="mr-2" />
+                  Carrinho ({itemCount})
+              </button>
               <div className="border-t border-gray-700"></div>
               {NAV_ITEMS.map((item) => (
                 <Link
@@ -230,6 +242,22 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
+              
+              {/* Mobile Social Links */}
+              <div className="flex items-center space-x-4 pt-4 border-t border-gray-600">
+                {SOCIAL_LINKS.map((social) => (
+                  <Link
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-secondary hover:text-accent transition-colors duration-300"
+                    aria-label={social.label}
+                  >
+                    {social.icon}
+                  </Link>
+                ))}
+              </div>
             </div>
           </motion.div>
         )}
