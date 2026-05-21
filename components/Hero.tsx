@@ -1,14 +1,48 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { ArrowRight, Star, Palette, Zap, ExternalLink, Instagram } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 const Hero = () => {
+  const bgImages = [
+    '/frieren/Frieren_01.png',
+    '/mercy/mercy_01.png',
+    '/going-merry/going_merry_01.png',
+    '/roxy-migurdia/roxy_migurdia_01.png',
+    '/this-is-fine/this_is_fine_01.png'
+  ];
+
+  const [currentBg, setCurrentBg] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentBg((prev) => (prev + 1) % bgImages.length);
+    }, 5000); // changes every 5 seconds
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary via-gray-800 to-primary">
-        <div className="absolute inset-0 bg-gray-800 opacity-20"></div>
+      <div className="absolute inset-0 bg-gray-900 overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentBg}
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 2, ease: "easeInOut" }}
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `url(${bgImages[currentBg]})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          />
+        </AnimatePresence>
+        {/* Dark overlay to keep text readable */}
+        <div className="absolute inset-0 bg-gray-900/85 backdrop-blur-[1px]"></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
