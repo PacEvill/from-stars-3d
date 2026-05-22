@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     /* Exemplo com Resend:
     await resend.emails.send({
       from: 'onboarding@resend.dev',
-      to: 'contato@fromstars3d.com',
+      to: 'fromstars3d@gmail.com',
       subject: `Nova mensagem de ${name}: ${subject}`,
       text: `De: ${email}\n\nMensagem:\n${message}`,
     });

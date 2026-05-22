@@ -2,7 +2,7 @@
 
 import { useState, FormEvent } from 'react'
 import { motion } from 'framer-motion'
-import { MessageCircle, Phone, Mail, Send, Star } from 'lucide-react'
+import { Mail, Send, Star } from 'lucide-react'
 
 const CTASection = () => {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' })
@@ -37,7 +37,7 @@ const CTASection = () => {
             viewport={{ once: true }}
             className="text-xl text-gray-300 max-w-3xl mx-auto"
           >
-            Tem uma ideia para uma peça personalizada? Quer encomendar algo especial? 
+            Tem uma ideia para impressão 3D? Quer orçamento para uma peça personalizada? 
             Estou aqui para transformar sua visão em realidade!
           </motion.p>
         </div>
@@ -120,7 +120,7 @@ const CTASection = () => {
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   className="input-field resize-none"
-                  placeholder="Conte-me sobre sua ideia, personagem favorito ou qualquer detalhe que queira compartilhar..."
+                  placeholder="Conte-me sobre sua ideia, objetivo do projeto e qualquer detalhe importante..."
                 ></textarea>
               </div>
 
@@ -143,7 +143,7 @@ const CTASection = () => {
             </form>
           </motion.div>
 
-          {/* Contact Info & WhatsApp CTA */}
+          {/* Contact Info */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -151,33 +151,6 @@ const CTASection = () => {
             viewport={{ once: true }}
             className="space-y-8"
           >
-            {/* WhatsApp CTA */}
-            <div className="card bg-gradient-to-br from-green-600/20 to-green-500/20 border-green-500/30">
-              <div className="text-center space-y-4">
-                <div className="w-16 h-16 bg-green-500 rounded-full mx-auto flex items-center justify-center">
-                  <Phone className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-heading font-semibold text-secondary">
-                  Contato Direto
-                </h3>
-                <p className="text-gray-300">
-                  Prefere um contato mais direto? Me chame no WhatsApp para conversarmos sobre sua ideia!
-                </p>
-                <a
-                  href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}?text=Olá! Vi seu site e gostaria de conversar sobre uma encomenda.`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
-                >
-                  <MessageCircle className="w-5 h-5" />
-                  <span>Chamar no WhatsApp</span>
-                </a>
-                <p className="text-sm text-gray-400">
-                  {process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}
-                </p>
-              </div>
-            </div>
-
             {/* Contact Information */}
             <div className="card">
               <h3 className="text-2xl font-heading font-semibold text-secondary mb-6">
@@ -201,17 +174,7 @@ const CTASection = () => {
                   </div>
                   <div>
                     <p className="text-secondary font-medium">E-mail</p>
-                    <p className="text-gray-400 text-sm">{process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contato@fromstars3d.com'}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center">
-                    <Phone className="w-5 h-5 text-accent" />
-                  </div>
-                  <div>
-                    <p className="text-secondary font-medium">WhatsApp</p>
-                    <p className="text-gray-400 text-sm">{process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}</p>
+                    <p className="text-gray-400 text-sm">{process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'fromstars3d@gmail.com'}</p>
                   </div>
                 </div>
               </div>

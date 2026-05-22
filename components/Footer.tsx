@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { Instagram, Video, Heart, ArrowUp } from 'lucide-react'
-import { motion } from 'framer-motion'
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -24,8 +23,8 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-gray-400 mb-4 max-w-md">
-              Transformando paixões em arte colecionável. Action figures personalizadas 
-              em resina 3D, pintadas à mão com amor e dedicação pela artista Camila.
+              Impressao 3D personalizada para projetos criativos e funcionais,
+              com acabamento cuidadoso e foco em qualidade em cada detalhe.
             </p>
             <div className="flex space-x-4">
               <a
@@ -95,20 +94,10 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="https://wa.me/5521986333478"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="mailto:fromstars3d@gmail.com"
                   className="text-gray-400 hover:text-accent transition-colors duration-300"
                 >
-                  +55 21 98633-3478
-                </a>
-              </li>
-              <li>
-                <a
-                  href="mailto:contato@fromstars3d.com"
-                  className="text-gray-400 hover:text-accent transition-colors duration-300"
-                >
-                  contato@fromstars3d.com
+                  fromstars3d@gmail.com
                 </a>
               </li>
             </ul>

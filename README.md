@@ -1,15 +1,15 @@
 # From Stars 3D - Site Oficial
 
-Site profissional e pessoal para a marca **"From Stars 3D"**, da artista **Camila**. O site funciona como portfólio central para exibir criações de action figures personalizadas e como principal plataforma para receber orçamentos e encomendas.
+Site profissional e pessoal para a marca **"From Stars 3D"**, da artista **Camila**. O site funciona como portfólio central para exibir projetos de impressão 3D personalizada e como principal plataforma para receber orçamentos e encomendas.
 
 ## 🎯 Sobre o Projeto
 
 Este site foi desenvolvido seguindo as melhores práticas de UX/UI, SEO e performance, incorporando:
 
 - **Design Moderno e Responsivo**: Interface elegante que transmite a qualidade do trabalho artesanal
-- **SEO Otimizado**: Otimizado para termos como "figures personalizadas Rio de Janeiro", "encomenda action figures Brasil"
+- **SEO Otimizado**: Otimizado para termos como "impressão 3D personalizada Rio de Janeiro", "encomenda impressão 3D Brasil"
 - **Integração com Redes Sociais**: Links para Instagram (@from.stars.3d) e TikTok (@from.stars.3d)
-- **Contato Direto**: Botões "Click-to-Chat" para WhatsApp (+55 21 98633-3478)
+- **Contato Direto**: Canais por Instagram, TikTok e e-mail ([fromstars3d@gmail.com](mailto:fromstars3d@gmail.com))
 - **Formulário de Encomendas**: Sistema completo para captação de leads
 
 ## 🚀 Tecnologias Utilizadas
@@ -108,7 +108,7 @@ Crie um arquivo `.env.local` na raiz do projeto:
 NEXT_PUBLIC_SITE_URL=https://fromstars3d.com
 NEXT_PUBLIC_INSTAGRAM_USERNAME=from.stars.3d
 NEXT_PUBLIC_TIKTOK_USERNAME=from.stars.3d
-NEXT_PUBLIC_WHATSAPP_NUMBER=+5521986333478
+NEXT_PUBLIC_CONTACT_EMAIL=fromstars3d@gmail.com
 ```
 
 ### Personalizações
@@ -174,7 +174,7 @@ Avaliação final (MVP): 13–20 de junho
 Para dúvidas técnicas ou suporte:
 - **Desenvolvedor**:
 - **Artista**: Camila - From Stars 3D
-- **WhatsApp**:
+- **E-mail**: [fromstars3d@gmail.com](mailto:fromstars3d@gmail.com)
 
 ## 📄 Licença
 

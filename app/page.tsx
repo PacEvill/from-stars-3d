@@ -39,7 +39,7 @@ export default function Home() {
                 <span className="text-3xl font-bold text-white">1</span>
               </div>
               <h3 className="text-2xl font-bold text-secondary mb-3">Envie sua Ideia</h3>
-              <p className="text-gray-400">Compartilhe uma referência, modelo ou simplesmente a sua imaginação conosco via WhatsApp.</p>
+              <p className="text-gray-400">Compartilhe uma referência, modelo ou simplesmente a sua imaginação pelos nossos canais de contato.</p>
             </div>
             
             {/* Passo 2 */}

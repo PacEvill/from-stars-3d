@@ -70,8 +70,8 @@ const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              Transforme seu personagem favorito em uma peça única de arte colecionável. 
-              Action figures personalizadas em resina 3D, pintadas à mão com amor e dedicação.
+              Soluções em impressão 3D para projetos criativos, decorativos e funcionais.
+              Acabamento cuidadoso, alta precisão e produção personalizada para cada ideia.
             </motion.p>
           </div>
 
@@ -141,16 +141,6 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1 }}
           >
-            <a
-              href="https://wa.me/5521986333478?text=Olá! Vi seu site e gostaria de conversar sobre uma encomenda."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-all duration-300 transform hover:scale-105"
-            >
-              <span className="mr-2">💬</span>
-              WhatsApp Direto
-            </a>
-            
             <a
               href="https://instagram.com/from.stars.3d"
               target="_blank"

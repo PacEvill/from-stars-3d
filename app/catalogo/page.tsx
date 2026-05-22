@@ -34,7 +34,6 @@ export default function CatalogoPage() {
   const [filterPrecoMin, setFilterPrecoMin] = useState('')
   const [filterPrecoMax, setFilterPrecoMax] = useState('')
   const [filteredModelos, setFilteredModelos] = useState<Produto[]>([])
-  const [pageOrigin, setPageOrigin] = useState('')
 
   // ... (images remain same)
 
@@ -52,12 +51,6 @@ export default function CatalogoPage() {
       }
     }
     fetchProdutos()
-  }, [])
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setPageOrigin(window.location.origin)
-    }
   }, [])
 
   // Lógica de filtragem
@@ -109,15 +102,6 @@ export default function CatalogoPage() {
 
   if (loading) {
     return <div className="min-h-screen bg-primary py-16 px-4 text-center text-white">Carregando produtos...</div>
-  }
-
-  const createWhatsappLink = (produtoId: number) => {
-    const baseUrl = 'https://wa.me/5521986333478'
-    const itemUrl = pageOrigin
-      ? `${pageOrigin}/produto/${produtoId}`
-      : `/produto/${produtoId}`
-    const mensagem = `ola gostaria de fazer um orçamento desta peça ${itemUrl}`
-    return `${baseUrl}?text=${encodeURIComponent(mensagem)}`
   }
 
   return (
@@ -217,7 +201,7 @@ export default function CatalogoPage() {
           <div className="mb-8 bg-gradient-to-r from-purple-900 to-indigo-900 rounded-2xl p-6 border border-purple-500/30 shadow-lg flex flex-col sm:flex-row items-center justify-between">
             <div>
               <h2 className="text-2xl font-bold text-white mb-2">Desconto em Figures de RPG!</h2>
-              <p className="text-purple-200">Use o cupom <span className="font-mono bg-black/30 px-2 py-1 rounded text-accent">Mestre20</span> no seu orçamento via WhatsApp.</p>
+              <p className="text-purple-200">Use o cupom <span className="font-mono bg-black/30 px-2 py-1 rounded text-accent">Mestre20</span> no seu orçamento pelos nossos canais oficiais.</p>
             </div>
             <div className="mt-4 sm:mt-0 flex space-x-2">
               <button onClick={() => setFilterCategory('RPG')} className="px-4 py-2 bg-purple-800 hover:bg-purple-700 rounded-full text-sm font-bold text-white transition-colors border border-purple-600">RPG</button>

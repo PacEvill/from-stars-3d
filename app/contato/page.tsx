@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Instagram, MapPin, Mail, Phone } from 'lucide-react';
+import { Instagram, Mail, Video } from 'lucide-react';
 
 export default function ContatoPage() {
   return (
@@ -12,10 +12,10 @@ export default function ContatoPage() {
           <p className="text-gray-400">Fique atualizado seguindo nossas redes para novidades sobre o lançamento completo dessa página.</p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 text-left">
+        <div className="grid md:grid-cols-3 gap-6 text-left">
           <div className="bg-gray-700/50 p-6 rounded-xl hover:bg-gray-700 transition-colors">
             <h3 className="text-lg font-bold text-white mb-4 flex items-center">
-              <Instagram className="mr-2 text-accent" /> Redes Sociais
+              <Instagram className="mr-2 text-accent" /> Instagram
             </h3>
             <a href="https://instagram.com/from.stars.3d" target="_blank" rel="noreferrer" className="text-gray-300 hover:text-accent flex items-center">
               @from.stars.3d
@@ -24,10 +24,19 @@ export default function ContatoPage() {
 
           <div className="bg-gray-700/50 p-6 rounded-xl hover:bg-gray-700 transition-colors">
             <h3 className="text-lg font-bold text-white mb-4 flex items-center">
-              <Phone className="mr-2 text-accent" /> WhatsApp
+              <Video className="mr-2 text-accent" /> TikTok
             </h3>
-            <a href="https://wa.me/5521986333478" target="_blank" rel="noreferrer" className="text-gray-300 hover:text-accent">
-              (21) 98633-3478
+            <a href="https://tiktok.com/@from.stars.3d" target="_blank" rel="noreferrer" className="text-gray-300 hover:text-accent">
+              @from.stars.3d
+            </a>
+          </div>
+
+          <div className="bg-gray-700/50 p-6 rounded-xl hover:bg-gray-700 transition-colors">
+            <h3 className="text-lg font-bold text-white mb-4 flex items-center">
+              <Mail className="mr-2 text-accent" /> E-mail
+            </h3>
+            <a href="mailto:fromstars3d@gmail.com" className="text-gray-300 hover:text-accent break-all">
+              fromstars3d@gmail.com
             </a>
           </div>
         </div>
