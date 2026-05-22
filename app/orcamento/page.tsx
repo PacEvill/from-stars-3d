@@ -56,7 +56,7 @@ const BudgetPage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 pt-24 pb-8">
       <h1 className="text-4xl font-bold text-center mb-8">Solicitar Orçamento</h1>
       <p className="text-lg text-center mb-12">Envie seu arquivo 3D (.STL ou .OBJ) para receber um orçamento personalizado.</p>
 
