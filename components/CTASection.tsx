@@ -127,13 +127,13 @@ const CTASection = () => {
               <button
                 type="submit"
                 disabled={status.loading}
-                className="btn-primary w-full group disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-primary w-full group flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {status.loading ? (
                   'Enviando...'
                 ) : (
                   <>
-                    <Send className="mr-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                    <Send className="w-5 h-5 shrink-0 group-hover:translate-x-1 transition-transform duration-300" />
                     Enviar Mensagem
                   </>
                 )}
