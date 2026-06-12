@@ -1,45 +1,12 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
-import EmailProvider from 'next-auth/providers/email';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import prisma from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
-import { createTransport } from 'nodemailer';
 import type { JWT } from 'next-auth/jwt';
 
-const prismaAdapterCompat = PrismaAdapter as unknown as (client: unknown, modelMapping?: unknown) => unknown;
-
 export const authOptions: NextAuthOptions = {
-  adapter: prismaAdapterCompat(prisma as any, {
-    user: 'Usuario',
-    account: 'Account',
-    session: 'Session',
-    verificationToken: 'VerificationToken',
-  } as any) as any,
   providers: [
-    EmailProvider({
-      server: {
-        host: process.env.EMAIL_SERVER_HOST,
-        port: Number(process.env.EMAIL_SERVER_PORT),
-        auth: {
-          user: process.env.EMAIL_SERVER_USER,
-          pass: process.env.EMAIL_SERVER_PASSWORD,
-        },
-      },
-      from: process.env.EMAIL_FROM,
-      async sendVerificationRequest({ identifier: email, url, provider: { server, from } }) {
-        const { host } = new URL(url);
-        const transport = createTransport(server);
-        await transport.sendMail({
-          to: email,
-          from,
-          subject: `Verifique seu e-mail para ${host}`,
-          text: `Para fazer login, clique no link: ${url}`,
-          html: `<p>Para fazer login no From Stars 3D, clique no link abaixo:</p><p><a href="${url}">${url}</a></p>`,
-        });
-      },
-    }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
