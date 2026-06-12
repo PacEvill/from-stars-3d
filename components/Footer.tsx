@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Instagram, Video, Heart, ArrowUp } from 'lucide-react'
+import { Instagram, Video, Heart, ArrowUp, MessageCircle } from 'lucide-react'
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -44,6 +44,15 @@ const Footer = () => {
                 aria-label="TikTok"
               >
                 <Video size={20} />
+              </a>
+              <a
+                href="https://wa.me/5521986333478"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-accent transition-colors duration-300"
+                aria-label="WhatsApp"
+              >
+                <MessageCircle size={20} />
               </a>
             </div>
           </div>

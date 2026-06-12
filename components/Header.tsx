@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 import { useCart } from '@/components/CartProvider'
-import { Menu, X, Instagram, Video, User, LogOut, ShoppingCart } from 'lucide-react'
+import { Menu, X, Instagram, Video, User, LogOut, ShoppingCart, MessageCircle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 // Types
@@ -44,6 +44,11 @@ const Header = () => {
       icon: <Video size={20} />,
       href: 'https://tiktok.com/@from.stars.3d',
       label: 'TikTok'
+    },
+    {
+      icon: <MessageCircle size={20} />,
+      href: 'https://wa.me/5521986333478',
+      label: 'WhatsApp'
     }
   ]
 
