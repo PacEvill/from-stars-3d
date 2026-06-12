@@ -43,8 +43,8 @@ export async function POST(request: Request) {
     console.log('Novo usuário criado:', novoUsuario);
 
     return NextResponse.json(novoUsuario, { status: 201 });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erro ao criar usuário:', error);
-    return NextResponse.json({ message: 'Erro interno do servidor ao criar usuário.' }, { status: 500 });
+    return NextResponse.json({ message: `Erro ao criar usuário: ${error.message || error}` }, { status: 500 });
   }
 }
