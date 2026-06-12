@@ -1,8 +1,8 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 
 export default function CadastroPage() {
   const [name, setName] = useState('')
@@ -12,6 +12,13 @@ export default function CadastroPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const { data: session, status } = useSession()
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.push('/perfil')
+    }
+  }, [status, router])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()

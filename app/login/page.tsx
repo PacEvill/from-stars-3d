@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
@@ -10,6 +10,8 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+
+  const { data: session, status } = useSession()
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -20,6 +22,12 @@ export default function LoginPage() {
       }
     }
   }, [])
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.push('/perfil')
+    }
+  }, [status, router])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
