@@ -1,36 +1,48 @@
 import { NextResponse } from 'next/server'
-
-// Em uma aplicação real, você usaria um serviço de e-mail como Resend, SendGrid, ou Nodemailer.
-// import { Resend } from 'resend';
-// const resend = new Resend(process.env.RESEND_API_KEY);
+import { getServerSession } from 'next-auth/next'
+import { authOptions } from '@/lib/auth-options'
+import prisma from '@/lib/prisma'
+import { writeFile } from 'fs/promises'
+import path from 'path'
+import fs from 'fs'
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json()
-    const { name, email, subject, message } = body
-
-    // Validação simples dos campos
-    if (!name || !email || !message) {
-      return NextResponse.json({ error: 'Nome, e-mail e mensagem são obrigatórios.' }, { status: 400 })
+    const session = await getServerSession(authOptions)
+    if (!session || !session.user) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    // TODO: Implementar o envio de e-mail aqui.
-    // Por enquanto, vamos apenas logar os dados no console do servidor.
-    console.log('Nova mensagem recebida:')
-    console.log({ name, email, subject, message })
+    const formData = await request.formData()
+    const file = formData.get('file') as File | null
 
-    /* Exemplo com Resend:
-    await resend.emails.send({
-      from: 'onboarding@resend.dev',
-      to: 'fromstars3d@gmail.com',
-      subject: `Nova mensagem de ${name}: ${subject}`,
-      text: `De: ${email}\n\nMensagem:\n${message}`,
-    });
-    */
+    if (!file) {
+      return NextResponse.json({ error: 'Nenhum arquivo enviado.' }, { status: 400 })
+    }
 
-    return NextResponse.json({ message: 'Mensagem enviada com sucesso!' })
+    const bytes = await file.arrayBuffer()
+    const buffer = Buffer.from(bytes)
+
+    // Save to public/uploads
+    const uploadDir = path.join(process.cwd(), 'public/uploads')
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true })
+    }
+
+    const filename = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`
+    const filepath = path.join(uploadDir, filename)
+    await writeFile(filepath, buffer)
+
+    const imageUrl = `/uploads/${filename}`
+
+    await prisma.usuario.update({
+      where: { id: Number(session.user.id) },
+      data: { imagem: imageUrl }
+    })
+
+    return NextResponse.json({ message: 'Imagem atualizada com sucesso!', imageUrl })
   } catch (error) {
-    console.error('Erro ao processar formulário de contato:', error)
-    return NextResponse.json({ error: 'Ocorreu um erro ao enviar a mensagem.' }, { status: 500 })
+    console.error('Erro ao fazer upload da imagem:', error)
+    return NextResponse.json({ error: 'Ocorreu um erro ao atualizar a imagem.' }, { status: 500 })
   }
 }

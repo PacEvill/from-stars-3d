@@ -27,8 +27,12 @@ export default function ProfilePage() {
 
     setMessage('Atualizando imagem...')
     try {
+      const formData = new FormData()
+      formData.append('file', file)
+
       const response = await fetch('/api/usuarios/imagem', {
         method: 'POST',
+        body: formData,
       })
 
       const data = await response.json()
