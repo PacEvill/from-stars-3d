@@ -13,6 +13,10 @@ export async function GET(request: Request) {
 
   const userId = Number(session.user.id)
 
+  if (isNaN(userId) || userId > 2147483647) {
+    return NextResponse.json({ error: 'Sessão inválida ou expirada. Por favor, saia (logout) e faça login novamente.' }, { status: 400 })
+  }
+
   try {
     let carrinho = await prisma.carrinho.findUnique({
       where: { usuarioId: userId },
@@ -55,6 +59,10 @@ export async function POST(request: Request) {
   }
 
   const userId = Number(session.user.id)
+
+  if (isNaN(userId) || userId > 2147483647) {
+    return NextResponse.json({ error: 'Sessão inválida ou expirada. Por favor, saia (logout) e faça login novamente.' }, { status: 400 })
+  }
 
   try {
     const { produtoId, quantidade } = await request.json()

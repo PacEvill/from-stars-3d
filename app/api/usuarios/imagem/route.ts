@@ -13,6 +13,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
+    const userId = Number(session.user.id)
+    if (isNaN(userId) || userId > 2147483647) {
+      return NextResponse.json({ error: 'Sessão inválida ou expirada. Por favor, saia (logout) e faça login novamente.' }, { status: 400 })
+    }
+
     const formData = await request.formData()
     const file = formData.get('file') as File | null
 
@@ -36,7 +41,7 @@ export async function POST(request: Request) {
     const imageUrl = `/uploads/${filename}`
 
     await prisma.usuario.update({
-      where: { id: Number(session.user.id) },
+      where: { id: userId },
       data: { imagem: imageUrl }
     })
 

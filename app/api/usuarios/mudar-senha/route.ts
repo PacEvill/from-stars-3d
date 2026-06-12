@@ -13,6 +13,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
   }
 
+  const userId = Number(session.user.id)
+  if (isNaN(userId) || userId > 2147483647) {
+    return NextResponse.json({ error: 'Sessão inválida ou expirada. Por favor, saia (logout) e faça login novamente.' }, { status: 400 })
+  }
+
   try {
     const { currentPassword, newPassword } = await request.json()
 
@@ -21,7 +26,7 @@ export async function POST(request: Request) {
     }
 
     const user = await prisma.usuario.findUnique({
-      where: { id: Number(session.user.id) },
+      where: { id: userId },
     })
 
     if (!user || !user.senha) {
@@ -37,7 +42,7 @@ export async function POST(request: Request) {
     const hashedNewPassword = await bcrypt.hash(newPassword, 10)
 
     await prisma.usuario.update({
-      where: { id: Number(session.user.id) },
+      where: { id: userId },
       data: { senha: hashedNewPassword },
     })
 
