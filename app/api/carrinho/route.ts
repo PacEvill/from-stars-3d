@@ -108,8 +108,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json(carrinhoAtualizado)
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("Erro ao adicionar item ao carrinho:", error)
-    return NextResponse.json({ error: 'Erro ao adicionar item ao carrinho' }, { status: 500 })
+    return NextResponse.json({ error: error.message || 'Erro ao adicionar item ao carrinho' }, { status: 500 })
   }
 }
