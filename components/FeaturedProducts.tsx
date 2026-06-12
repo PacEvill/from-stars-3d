@@ -8,7 +8,7 @@ import { useState } from 'react'
 
 const featuredProducts = [
   {
-    id: 'frieren',
+    id: 1,
     name: 'Frieren',
     category: 'Anime',
     description: 'A maga imortal em sua forma mais elegante e misteriosa.',
@@ -22,7 +22,7 @@ const featuredProducts = [
     featured: true
   },
   {
-    id: 'mercy',
+    id: 2,
     name: 'Mercy',
     category: 'Gaming',
     description: 'A anjo da guarda de Overwatch em detalhes realistas impressionantes.',
@@ -38,7 +38,7 @@ const featuredProducts = [
     featured: true
   },
   {
-    id: 'roxy-migurdia',
+    id: 3,
     name: 'Roxy Migurdia',
     category: 'Anime',
     description: 'A professora de magia com sua personalidade única e carismática.',
@@ -53,7 +53,7 @@ const featuredProducts = [
     featured: true
   },
   {
-    id: 'going-merry',
+    id: 4,
     name: 'Going Merry',
     category: 'Anime',
     description: 'O navio mais querido de One Piece em formato chibi adorável.',
@@ -67,7 +67,7 @@ const featuredProducts = [
     featured: true
   },
   {
-    id: 'this-is-fine',
+    id: 5,
     name: 'This is Fine',
     category: 'Meme',
     description: 'O meme clássico do cachorro em situação de caos, perfeitamente capturado.',
@@ -81,7 +81,7 @@ const featuredProducts = [
     featured: true
   },
   {
-    id: 'hollow-knight-coreto',
+    id: 6,
     name: 'Hollow Knight — Coreto',
     category: 'Gaming',
     description: 'Diorama do Knight descansando em um coreto ornamentado. Cena icônica com detalhes intrincados.',
@@ -90,7 +90,7 @@ const featuredProducts = [
     featured: true
   },
   {
-    id: 'hollow-knight-hornet',
+    id: 7,
     name: 'Hornet — Greenpath',
     category: 'Gaming',
     description: 'Diorama detalhado da Hornet em Greenpath com cenário completo de floresta e fauna.',
@@ -99,7 +99,7 @@ const featuredProducts = [
     featured: true
   },
   {
-    id: 'ganyu-chibi',
+    id: 8,
     name: 'Ganyu Chibi',
     category: 'Gaming',
     description: 'Figure chibi da Ganyu de Genshin Impact com base de gelo e pintura vibrante.',
@@ -108,7 +108,7 @@ const featuredProducts = [
     featured: true
   },
   {
-    id: 'jaspion',
+    id: 9,
     name: 'Jaspion',
     category: 'Tokusatsu',
     description: 'O herói tokusatsu em pose de combate com espada laser. Pintura com acabamento metalizado.',
@@ -117,7 +117,7 @@ const featuredProducts = [
     featured: true
   },
   {
-    id: 'mascara-oni',
+    id: 10,
     name: 'Máscara Oni',
     category: 'Decorativo',
     description: 'Máscara tradicional japonesa Oni com pintura artesanal em vermelho metálico.',
