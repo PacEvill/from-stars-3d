@@ -86,7 +86,7 @@ export default function CursosPage() {
           <div className="relative bg-white rounded-2xl p-4 shadow-lg shadow-accent/10 
                           group-hover:shadow-accent/20 transition-shadow duration-500 mb-6">
             <Image
-              src="/catalogo/qrcode-pesquisa.jpeg"
+              src="/cursos/qrcode_pesquisa.jpeg"
               alt="QR Code — Responda nossa pesquisa sobre o curso de pintura"
               width={200}
               height={200}
