@@ -11,41 +11,52 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       async profile(profile) {
-        const user = await prisma.usuario.findUnique({
-          where: { email: profile.email },
-        });
-
-        if (!user) {
-          const newUser = await prisma.usuario.create({
-            data: {
-              email: profile.email,
-              nome: profile.name,
-              imagem: profile.picture,
-              emailVerified: new Date(),
-            },
+        try {
+          const user = await prisma.usuario.findUnique({
+            where: { email: profile.email },
           });
+
+          if (!user) {
+            const newUser = await prisma.usuario.create({
+              data: {
+                email: profile.email,
+                nome: profile.name,
+                imagem: profile.picture,
+                emailVerified: new Date(),
+              },
+            });
+
+            return {
+              id: newUser.id.toString(),
+              name: newUser.nome,
+              email: newUser.email,
+              image: newUser.imagem,
+            };
+          }
+
+          if (!user.emailVerified) {
+            await prisma.usuario.update({
+              where: { id: user.id },
+              data: { emailVerified: new Date() },
+            });
+          }
 
           return {
-            id: newUser.id.toString(),
-            name: newUser.nome,
-            email: newUser.email,
-            image: newUser.imagem,
+            id: user.id.toString(),
+            name: user.nome,
+            email: user.email,
+            image: user.imagem,
+          };
+        } catch (error) {
+          console.error('[NextAuth] Google profile callback DB error:', error);
+          // Fallback: allow login even if DB is unreachable
+          return {
+            id: profile.sub,
+            name: profile.name,
+            email: profile.email,
+            image: profile.picture,
           };
         }
-
-        if (!user.emailVerified) {
-          await prisma.usuario.update({
-            where: { id: user.id },
-            data: { emailVerified: new Date() },
-          });
-        }
-
-        return {
-          id: user.id.toString(),
-          name: user.nome,
-          email: user.email,
-          image: user.imagem,
-        };
       },
     }),
     CredentialsProvider({
