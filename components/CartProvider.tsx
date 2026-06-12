@@ -88,13 +88,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ produtoId, quantidade }),
       })
-      if (!response.ok) throw new Error('Falha ao adicionar item.')
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || errorData.message || 'Falha ao adicionar item.')
+      }
       const updatedCart = await response.json()
       setCart(updatedCart)
       alert('Item adicionado ao carrinho!')
-    } catch (error) {
+    } catch (error: any) {
       console.error(error)
-      alert('Ocorreu um erro ao adicionar o item.')
+      alert(`Ocorreu um erro ao adicionar o item: ${error.message}`)
     }
   }
 
@@ -108,11 +111,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           body: JSON.stringify({ quantidade }),
         }
       )
-      if (!response.ok) throw new Error('Falha ao atualizar o item.')
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || errorData.message || 'Falha ao atualizar o item.')
+      }
       await fetchCart() // Re-busca o carrinho para ter o estado mais recente
-    } catch (error) {
+    } catch (error: any) {
       console.error(error)
-      alert('Ocorreu um erro ao atualizar o item.')
+      alert(`Ocorreu um erro ao atualizar o item: ${error.message}`)
     }
   }
 
@@ -120,11 +126,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const removeFromCart = async (itemId: number) => {
     try {
       const response = await fetch(`/api/carrinho/items/${itemId}`, { method: 'DELETE' })
-      if (!response.ok) throw new Error('Falha ao remover o item.')
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || errorData.message || 'Falha ao remover o item.')
+      }
       await fetchCart() // Re-busca o carrinho para ter o estado mais recente
-    } catch (error) {
+    } catch (error: any) {
       console.error(error)
-      alert('Ocorreu um erro ao remover o item.')
+      alert(`Ocorreu um erro ao remover o item: ${error.message}`)
     }
   }
 
