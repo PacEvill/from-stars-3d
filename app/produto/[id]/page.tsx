@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import AddToCartButton from '@/components/AddToCartButton'
+import { allProducts } from '@/lib/products'
 
 // Definindo o tipo do produto que vem da API
 interface Produto {
@@ -15,22 +16,38 @@ interface Produto {
   Material: {
     nome: string;
   } | null;
-  // Supondo que o modelo possa ter uma galeria de imagens no futuro.
-  // Por enquanto, usaremos a imagem principal.
 }
 
 async function getProduct(id: string): Promise<Produto | null> {
   try {
-    // Em um ambiente real, a URL da API estaria em uma variável de ambiente
-    const res = await fetch(`http://localhost:3000/api/produtos/${id}`, { cache: 'no-store' })
-    if (!res.ok) {
-      return null
+    // Try API first
+    const res = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/produtos/${id}`, {
+      cache: 'no-store'
+    })
+    if (res.ok) {
+      return res.json()
     }
-    return res.json()
   } catch (error) {
-    console.error(error)
-    return null
+    console.error('API fetch failed:', error)
   }
+
+  // Fallback to static products
+  const numId = Number(id)
+  const staticProduct = allProducts.find(p => p.id === numId)
+  if (staticProduct) {
+    return {
+      id: staticProduct.id,
+      nome: staticProduct.nome,
+      descricao: staticProduct.descricao,
+      preco: staticProduct.preco,
+      imagem: staticProduct.imagem,
+      categoria: staticProduct.categoria,
+      tamanho: staticProduct.tamanho,
+      disponibilidade: staticProduct.disponibilidade,
+      Material: null,
+    }
+  }
+  return null
 }
 
 export default async function ProductDetailPage({ params }: { params: { id: string } }) {

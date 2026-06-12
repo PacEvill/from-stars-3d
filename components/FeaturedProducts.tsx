@@ -79,6 +79,51 @@ const featuredProducts = [
     ],
     tags: ['Meme', 'Humor', 'Internet'],
     featured: true
+  },
+  {
+    id: 'hollow-knight-coreto',
+    name: 'Hollow Knight — Coreto',
+    category: 'Gaming',
+    description: 'Diorama do Knight descansando em um coreto ornamentado. Cena icônica com detalhes intrincados.',
+    images: ['/hollow-knight-coreto/hollow_knight_coreto_01.jpeg'],
+    tags: ['Gaming', 'Indie', 'Diorama'],
+    featured: true
+  },
+  {
+    id: 'hollow-knight-hornet',
+    name: 'Hornet — Greenpath',
+    category: 'Gaming',
+    description: 'Diorama detalhado da Hornet em Greenpath com cenário completo de floresta e fauna.',
+    images: ['/hollow-knight-hornet/hollow_knight_hornet_01.jpeg'],
+    tags: ['Gaming', 'Indie', 'Diorama'],
+    featured: true
+  },
+  {
+    id: 'ganyu-chibi',
+    name: 'Ganyu Chibi',
+    category: 'Gaming',
+    description: 'Figure chibi da Ganyu de Genshin Impact com base de gelo e pintura vibrante.',
+    images: ['/ganyu-chibi/ganyu_chibi_01.jpeg'],
+    tags: ['Gaming', 'Chibi', 'Genshin'],
+    featured: true
+  },
+  {
+    id: 'jaspion',
+    name: 'Jaspion',
+    category: 'Tokusatsu',
+    description: 'O herói tokusatsu em pose de combate com espada laser. Pintura com acabamento metalizado.',
+    images: ['/jaspion/jaspion_01.jpeg'],
+    tags: ['Tokusatsu', 'Retrô', 'Action'],
+    featured: true
+  },
+  {
+    id: 'mascara-oni',
+    name: 'Máscara Oni',
+    category: 'Decorativo',
+    description: 'Máscara tradicional japonesa Oni com pintura artesanal em vermelho metálico.',
+    images: ['/mascara-oni/mascara_oni_01.jpeg', '/mascara-oni/mascara_oni_02.jpeg', '/mascara-oni/mascara_oni_03.jpeg'],
+    tags: ['Japonês', 'Decoração', 'Máscara'],
+    featured: true
   }
 ]
 

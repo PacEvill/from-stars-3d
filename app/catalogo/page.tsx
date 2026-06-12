@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useCart } from '@/components/CartProvider'
 import { ShoppingCart } from 'lucide-react'
+import { allProducts } from '@/lib/products'
 
 // Definindo o tipo do produto que vem da API
 interface Produto {
@@ -81,14 +82,19 @@ export default function CatalogoPage() {
       )
     }
 
-    // Include Camila's requested mock items if search is empty to satisfy requirements
+    // Fallback to static product data when DB returns empty
     if (!searchTerm && currentModelos.length === 0 && !loading) {
-        currentModelos = [
-            { id: 991, nome: 'Chaveiro Hornet', descricao: 'Chaveiro impresso em resina', preco: 25, imagem: '/this-is-fine/this_is_fine_01.png', categoria: 'Chaveiros', tamanho: null, disponibilidade: 'Pronta-entrega', Material: null },
-            { id: 992, nome: 'Momo Ayase escala 1:7', descricao: 'Figure super detalhada', preco: 250, imagem: '/frieren/Frieren_02.png', categoria: 'Figures', tamanho: null, disponibilidade: 'Sob encomenda', Material: null },
-            { id: 993, nome: 'Porta-cartões dragão', descricao: 'Acessório de mesa', preco: 45, imagem: '/mercy/mercy_02.png', categoria: 'Porta-cartões', tamanho: null, disponibilidade: 'Pronta-entrega', Material: null },
-            { id: 994, nome: 'Luminária Hollow Knight', descricao: 'Luminária decorativa LED', preco: 180, imagem: '/going-merry/going_merry_02.png', categoria: 'RPG', tamanho: null, disponibilidade: 'Sob encomenda', Material: null }
-        ] as any[];
+        currentModelos = allProducts.map(p => ({
+          id: p.id,
+          nome: p.nome,
+          descricao: p.descricao,
+          preco: p.preco,
+          imagem: p.imagem,
+          categoria: p.categoria,
+          tamanho: p.tamanho,
+          disponibilidade: p.disponibilidade,
+          Material: null,
+        }));
     }
 
     setFilteredModelos(currentModelos)
@@ -144,6 +150,7 @@ export default function CatalogoPage() {
                   <option value="Letreiros">Letreiros</option>
                   <option value="Suportes">Suportes</option>
                   <option value="RPG">RPG</option>
+                  <option value="Máscaras">Máscaras</option>
                 </select>
               </div>
 
