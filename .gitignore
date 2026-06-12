@@ -107,3 +107,4 @@ ROTEIRO_DEPLOY_VERCEL.txt
 
 # Análise de auditoria e recomendações
 ANALISE_AUDITORIA_E_RECOMENDACOES.txt
+\nclient_secret_*.json
